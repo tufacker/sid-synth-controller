@@ -57,7 +57,7 @@ The device assumes SID SYNTH's official default `.MCC` mapping.
 | Envelope Retrig | 67 | 0–2 | 0, 43, 86 |
 | Preset Select destination | 29 | 0–127 | not used; Program Change selects slots |
 
-The machine-readable copy is `dist/SID-SYNTH-M4L-v0.16.16/default_cc_map.csv`.
+The machine-readable copy is `docs/default_cc_map.csv` (also copied into `dist/SID SYNTH Controller/`).
 
 ## Play-mode order
 

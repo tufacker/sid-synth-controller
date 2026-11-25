@@ -23,8 +23,19 @@ its manual, from LukHash.
 
 ## Using it
 
-Download a release, keep its files together, and drag the `.amxd` onto a MIDI
-track routed to your C64's MIDI interface. The [user guide](docs/USER_GUIDE.md)
+1. Download a release and unzip it. You get one folder, `SID SYNTH Controller`.
+2. Install it into your Live User Library from Live's browser: select **User
+   Library** in the browser's sidebar, open `Presets` › `MIDI Effects`, and drag
+   the whole `SID SYNTH Controller` folder from Finder (or Explorer) onto the
+   `Max MIDI Effect` folder in the list. Live copies the folder with all its
+   files. Drag the folder, not just the `.amxd`, and drop it on a folder in the
+   list, not on the sidebar.
+3. Drag **SID SYNTH Controller** from there onto a MIDI track whose MIDI To
+   reaches your C64's MIDI interface.
+
+Don't load the `.amxd` straight from Downloads: dropped on a track or on Live's
+icon, it runs from where it sits and Live copies nothing, so the device breaks
+if that folder moves. The [user guide](docs/USER_GUIDE.md)
 covers setup and every feature; [hardware setup](docs/HARDWARE_SETUP.md)
 describes one complete working rig (TeensyROM, Ultimate 64, a USB MIDI
 interface).
@@ -81,7 +92,7 @@ C64's display. The sound, and the Live Set that stores it, are right either way.
 The device is generated from source by Node.js (18 or later, no dependencies):
 
 ```sh
-npm run build    # writes dist/SID-SYNTH-M4L-v<version>/
+npm run build    # writes dist/SID SYNTH Controller/
 npm run verify   # checks the build
 npm test         # tests the controller and the bank-file helper
 ```

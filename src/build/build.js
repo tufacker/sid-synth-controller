@@ -1,7 +1,7 @@
 /*
  * Builds the SID SYNTH Controller Max for Live device.
  *
- *   node src/build/build.js   ->   dist/SID-SYNTH-M4L-v<version>/
+ *   node src/build/build.js   ->   dist/SID SYNTH Controller/
  *
  * The device is generated rather than edited in Max so that every control,
  * colour and patch cord is reviewable here. Output folder contents:
@@ -21,11 +21,21 @@ const PALETTE = require('../device/sid_palette');
 const ROOT = path.resolve(__dirname, '..', '..');
 const VERSION = require(path.join(ROOT, 'package.json')).version;
 const DEVICE_DIR = path.join(ROOT, 'src', 'device');
-const OUT_DIR = path.join(ROOT, 'dist', `SID-SYNTH-M4L-v${VERSION}`);
 const DEVICE_NAME = 'SID SYNTH Controller';
+// The folder carries no version, so an installed copy keeps its path across
+// updates and Live Sets keep finding the device's scripts.
+const OUT_DIR = path.join(ROOT, 'dist', DEVICE_NAME);
 const WIDTH = 664, HEIGHT = 169;
 
+// Start from an empty folder so files from an older build never linger. Only
+// plain files directly inside dist/SID SYNTH Controller are removed.
+if (path.basename(OUT_DIR) !== DEVICE_NAME || path.dirname(OUT_DIR) !== path.join(ROOT, 'dist')) {
+  throw new Error(`unexpected output folder ${OUT_DIR}`);
+}
 fs.mkdirSync(OUT_DIR, {recursive: true});
+for (const entry of fs.readdirSync(OUT_DIR, {withFileTypes: true})) {
+  if (entry.isFile()) fs.unlinkSync(path.join(OUT_DIR, entry.name));
+}
 
 // ---------------------------------------------------------------------------
 // Files next to the device

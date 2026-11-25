@@ -18,8 +18,9 @@ test/                  Node tests of the built controller and the bank helper (m
 tools/                 verify_build.js (checks a build), extract_d64.js (pulls files off a .d64)
 ```
 
-`npm run build` writes `dist/SID-SYNTH-M4L-v<version>/`: `SID SYNTH Controller.amxd`
-(the version is in the folder name and shown small on the panel, not in the device name), the same
+`npm run build` writes `dist/SID SYNTH Controller/`: `SID SYNTH Controller.amxd`
+(the version is shown small on the panel and in the release zip's name, never in
+the device or folder name, so an installed copy keeps its path across updates), the same
 patcher as `.maxpat` JSON, `sid_ui_logic.js` (with the palette prepended),
 `sid_banks.js`, the waveform icons, and the user guide.
 

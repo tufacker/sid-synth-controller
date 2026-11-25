@@ -8,8 +8,7 @@ const path = require('path');
 const Module = require('module');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = require('../package.json').version;
-const DIST = path.join(ROOT, 'dist', `SID-SYNTH-M4L-v${VERSION}`);
+const DIST = path.join(ROOT, 'dist', 'SID SYNTH Controller');
 const PATCH = path.join(DIST, 'SID SYNTH Controller.maxpat');
 
 function readPatch() {

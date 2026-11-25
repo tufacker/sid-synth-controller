@@ -17,11 +17,28 @@ a USB MIDI interface and Live).
 
 ## Install
 
-Keep these files together in one folder and drag the `.amxd` onto a MIDI track:
+The release unzips to one folder, `SID SYNTH Controller`, holding the device
+(`SID SYNTH Controller.amxd`), the two scripts it needs (`sid_ui_logic.js`,
+`sid_banks.js`), its `sid_*.svg` icons and these guides. The files must stay
+together.
 
-- `SID SYNTH Controller.amxd`
-- `sid_ui_logic.js` and `sid_banks.js`
-- the `sid_*.svg` icons
+1. In Live's browser, select **User Library** in the sidebar and open
+   `Presets` › `MIDI Effects`.
+2. Drag the whole `SID SYNTH Controller` folder from Finder (Explorer on
+   Windows) onto the `Max MIDI Effect` folder in the list. Live copies it, with
+   every file, into your User Library. Drop the folder on a folder row in the
+   list; dropping it on the sidebar's User Library item does nothing, and the
+   list scrolls while you drag, so check where it lands.
+3. Drag **SID SYNTH Controller** from `Max MIDI Effect` onto a MIDI track.
+
+Loading the `.amxd` directly from Finder, or by dropping it on Live's icon, runs
+it from wherever it is without copying anything; if that folder is later moved
+or deleted, sets that use the device lose its scripts.
+
+To update, replace the files inside the installed `SID SYNTH Controller` folder
+with the new release's (right-click it in Live's browser and choose Show in
+Finder). The folder name carries no version, so Live Sets that use the device
+keep finding it, and your banks, which live in their own folder, are untouched.
 
 Set the track's **MIDI To** to the port that reaches the C64. Notes, pitch bend,
 mod wheel and everything else on the track pass through to SID SYNTH; the device

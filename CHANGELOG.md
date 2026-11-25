@@ -2,6 +2,14 @@
 
 This file records the major functional and design stages. The complete set of intermediate artifacts is preserved under `archive/builds/`.
 
+## Since v1.0.0 (unreleased)
+
+Packaging and documentation only; the device is unchanged.
+
+- **No version in any folder name.** The build writes `dist/SID SYNTH Controller/` and the release zip, `SID-SYNTH-Controller-v<version>.zip`, unzips to a folder of that name. An installed copy keeps its path across updates, so Live Sets that use it keep finding its scripts. The zip is made with plain `zip` (no `__MACOSX` entries).
+- **Install steps rewritten** after testing in Live 12: drag the whole folder from Finder onto `Presets/MIDI Effects/Max MIDI Effect` in the User Library list of Live's browser, which copies it with every file. Loading the `.amxd` straight from Finder or by dropping it on Live's icon copies nothing and ties the device to that folder.
+- The README and user guide explain that the C64 shows patch names from the bank it has loaded, and the user guide's title in the repository no longer shows a `{{VERSION}}` placeholder.
+
 ## v1.0.0 — current
 
 First public release. Functionally the same as v0.26.0.

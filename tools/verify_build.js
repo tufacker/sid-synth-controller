@@ -12,8 +12,8 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = require('../package.json').version;
-const DIR = path.join(ROOT, 'dist', `SID-SYNTH-M4L-v${VERSION}`);
 const NAME = 'SID SYNTH Controller';
+const DIR = path.join(ROOT, 'dist', NAME);
 const PARAMETERS = path.join(ROOT, 'test', 'fixtures', 'parameters.json');
 
 const fail = message => { console.error(`verify: ${message}`); process.exit(1); };

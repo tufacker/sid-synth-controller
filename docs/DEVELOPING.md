@@ -4,7 +4,7 @@ Requirements: Node.js 18 or later (no npm packages), and Ableton Live 12 with
 Max for Live (Max 9) to try the device.
 
 ```sh
-npm run build    # write dist/SID-SYNTH-M4L-v<version>/
+npm run build    # write dist/SID SYNTH Controller/
 npm run verify   # check the build: files, parameters, layout, no absolute paths
 npm test         # run the controller and bank-helper tests against the build
 npm run check    # all three
@@ -58,10 +58,12 @@ conditional control, and the rendered text rather than object coordinates
 
 1. Update `version` in `package.json` and add a `CHANGELOG.md` entry.
 2. `npm run check`, then the Live checks above.
-3. Zip the whole dist folder, not just the `.amxd`:
+3. Zip the whole folder, not just the `.amxd`. The zip's name carries the
+   version; the folder inside it does not, so people who update by replacing
+   the folder keep the same path and their Live Sets keep working:
 
    ```sh
-   ditto -c -k --sequesterRsrc --keepParent dist/SID-SYNTH-M4L-v<version> dist/SID-SYNTH-M4L-v<version>.zip
+   cd dist && zip -rX SID-SYNTH-Controller-v<version>.zip "SID SYNTH Controller" -x '*.DS_Store'
    ```
 
 ## Banks for trying it in Live
