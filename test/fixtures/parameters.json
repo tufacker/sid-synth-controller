@@ -1,0 +1,1219 @@
+[
+ {
+  "name": "Play Mode",
+  "short": "Play",
+  "order": 0,
+  "type": 2,
+  "min": 0,
+  "max": 6,
+  "initial": [
+   1
+  ],
+  "enum": [
+   "ARP",
+   "POLY",
+   "MONO",
+   "5TH",
+   "OCT",
+   "OCT+",
+   "ARP+"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_mode_play"
+ },
+ {
+  "name": "Arpeggiator Speed",
+  "short": "Speed",
+  "order": 1,
+  "type": 0,
+  "min": 1,
+  "max": 31,
+  "initial": [
+   8
+  ],
+  "unitstyle": 0,
+  "varname": "sid_arp_speed"
+ },
+ {
+  "name": "Arpeggiator Direction",
+  "short": "Dir",
+  "order": 2,
+  "type": 2,
+  "min": 0,
+  "max": 2,
+  "initial": [
+   1
+  ],
+  "enum": [
+   "DN",
+   "UP",
+   "ALT"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_arp_dir"
+ },
+ {
+  "name": "Portamento",
+  "short": "PORTA",
+  "order": 3,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "ON"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_mode_porta"
+ },
+ {
+  "name": "Vibrato On",
+  "short": "Vibrato",
+  "order": 4,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "ON"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_vib_on"
+ },
+ {
+  "name": "Vibrato Frequency",
+  "short": "Freq",
+  "order": 5,
+  "type": 0,
+  "min": 0,
+  "max": 31,
+  "initial": [
+   1
+  ],
+  "unitstyle": 0,
+  "varname": "sid_vib_freq"
+ },
+ {
+  "name": "Vibrato Rate",
+  "short": "Rate",
+  "order": 6,
+  "type": 0,
+  "min": 1,
+  "max": 32,
+  "initial": [
+   30
+  ],
+  "unitstyle": 0,
+  "varname": "sid_vib_rate"
+ },
+ {
+  "name": "Vibrato Delay",
+  "short": "Delay",
+  "order": 7,
+  "type": 0,
+  "min": 0,
+  "max": 31,
+  "initial": [
+   0
+  ],
+  "unitstyle": 0,
+  "varname": "sid_vib_delay"
+ },
+ {
+  "name": "Vibrato Type",
+  "short": "Type",
+  "order": 8,
+  "type": 2,
+  "min": 0,
+  "max": 3,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "U+D",
+   "INC",
+   "UP",
+   "DN"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_vib_type"
+ },
+ {
+  "name": "Vibrato Retrigger",
+  "short": "Retrig",
+  "order": 9,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "N",
+   "Y"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_vib_retrig"
+ },
+ {
+  "name": "Wave Pulse",
+  "short": "Pulse",
+  "order": 11,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   1
+  ],
+  "enum": [
+   "OFF",
+   "ON"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_wave_pulse"
+ },
+ {
+  "name": "Wave Saw",
+  "short": "Saw",
+  "order": 12,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "ON"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_wave_saw"
+ },
+ {
+  "name": "Wave Triangle",
+  "short": "Triangle",
+  "order": 13,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "ON"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_wave_tri"
+ },
+ {
+  "name": "Wave Noise",
+  "short": "Noise",
+  "order": 14,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "ON"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_wave_noise"
+ },
+ {
+  "name": "Ring Modulation",
+  "short": "Ring",
+  "order": 15,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "ON"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_ringm"
+ },
+ {
+  "name": "Hard Sync",
+  "short": "Sync",
+  "order": 16,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "ON"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_hsync"
+ },
+ {
+  "name": "Attack Click",
+  "short": "Click",
+  "order": 17,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "ON"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_click"
+ },
+ {
+  "name": "PWM On",
+  "short": "PWM",
+  "order": 18,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "ON"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_pwm_on"
+ },
+ {
+  "name": "PWM Width",
+  "short": "Width",
+  "order": 19,
+  "type": 0,
+  "min": 0,
+  "max": 127,
+  "initial": [
+   120
+  ],
+  "unitstyle": 0,
+  "varname": "sid_pwm_width"
+ },
+ {
+  "name": "PWM Rate",
+  "short": "Rate",
+  "order": 20,
+  "type": 0,
+  "min": 0,
+  "max": 31,
+  "initial": [
+   19
+  ],
+  "unitstyle": 0,
+  "varname": "sid_pwm_rate"
+ },
+ {
+  "name": "PWM Depth",
+  "short": "Depth",
+  "order": 21,
+  "type": 0,
+  "min": 0,
+  "max": 31,
+  "initial": [
+   22
+  ],
+  "unitstyle": 0,
+  "varname": "sid_pwm_depth"
+ },
+ {
+  "name": "PWM Cycle",
+  "short": "Cycle",
+  "order": 22,
+  "type": 2,
+  "min": 0,
+  "max": 3,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "D+U",
+   "U+D",
+   "UP",
+   "DN"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_pwm_cycle"
+ },
+ {
+  "name": "PWM Retrigger",
+  "short": "Retrig",
+  "order": 23,
+  "type": 2,
+  "min": 0,
+  "max": 2,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "LEG",
+   "Y",
+   "N"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_pwm_retrig"
+ },
+ {
+  "name": "Filter Mode",
+  "short": "Filter",
+  "order": 24,
+  "type": 2,
+  "min": 0,
+  "max": 3,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "LP",
+   "BP",
+   "HP"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_filter_type"
+ },
+ {
+  "name": "Filter Cutoff",
+  "short": "Cutoff",
+  "order": 25,
+  "type": 0,
+  "min": 0,
+  "max": 127,
+  "initial": [
+   64
+  ],
+  "unitstyle": 0,
+  "varname": "sid_filter_cutoff"
+ },
+ {
+  "name": "Filter Resonance",
+  "short": "Reso",
+  "order": 26,
+  "type": 0,
+  "min": 0,
+  "max": 15,
+  "initial": [
+   0
+  ],
+  "unitstyle": 0,
+  "varname": "sid_filter_reso"
+ },
+ {
+  "name": "Filter Envelope Amount",
+  "short": "Amt",
+  "order": 27,
+  "type": 0,
+  "min": -31,
+  "max": 31,
+  "initial": [
+   16
+  ],
+  "unitstyle": 0,
+  "varname": "sid_fenv_amt"
+ },
+ {
+  "name": "Filter Motion Rate",
+  "short": "Rate",
+  "order": 28,
+  "type": 0,
+  "min": 0,
+  "max": 31,
+  "initial": [
+   16
+  ],
+  "unitstyle": 0,
+  "varname": "sid_filter_rate"
+ },
+ {
+  "name": "Filter Motion Cycle",
+  "short": "Cycle",
+  "order": 29,
+  "type": 2,
+  "min": 0,
+  "max": 4,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "D+U",
+   "U+D",
+   "UP",
+   "DN"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_filter_cycle"
+ },
+ {
+  "name": "Filter Motion Retrigger",
+  "short": "Retrig",
+  "order": 30,
+  "type": 2,
+  "min": 0,
+  "max": 2,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "LEG",
+   "Y",
+   "N"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_filter_retrig"
+ },
+ {
+  "name": "Filter Envelope On",
+  "short": "Cutoff Env",
+  "order": 31,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "ON"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_fenv_on"
+ },
+ {
+  "name": "Filter Envelope Attack",
+  "short": "Attack",
+  "order": 32,
+  "type": 0,
+  "min": 0,
+  "max": 2000,
+  "initial": [
+   20
+  ],
+  "unitstyle": 9,
+  "varname": "sid_fenv_atk"
+ },
+ {
+  "name": "Filter Envelope Decay",
+  "short": "Decay",
+  "order": 33,
+  "type": 0,
+  "min": 0,
+  "max": 4000,
+  "initial": [
+   300
+  ],
+  "unitstyle": 9,
+  "varname": "sid_fenv_dec"
+ },
+ {
+  "name": "Filter Envelope Sustain",
+  "short": "Sustain",
+  "order": 34,
+  "type": 0,
+  "min": 0,
+  "max": 100,
+  "initial": [
+   35
+  ],
+  "unitstyle": 5,
+  "varname": "sid_fenv_sus"
+ },
+ {
+  "name": "Filter Envelope Release",
+  "short": "Release",
+  "order": 35,
+  "type": 0,
+  "min": 0,
+  "max": 4000,
+  "initial": [
+   300
+  ],
+  "unitstyle": 9,
+  "varname": "sid_fenv_rel"
+ },
+ {
+  "name": "Tremolo On",
+  "short": "Tremolo",
+  "order": 36,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "ON"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_trem_on"
+ },
+ {
+  "name": "Tremolo Rate",
+  "short": "Rate",
+  "order": 37,
+  "type": 0,
+  "min": 0,
+  "max": 31,
+  "initial": [
+   17
+  ],
+  "unitstyle": 0,
+  "varname": "sid_trem_rate"
+ },
+ {
+  "name": "Amp Envelope Retrigger",
+  "short": "Retrig",
+  "order": 38,
+  "type": 2,
+  "min": 0,
+  "max": 2,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "AUTO",
+   "ALW",
+   "LEG"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_env_retrig"
+ },
+ {
+  "name": "Amp Attack",
+  "short": "Attack",
+  "order": 39,
+  "type": 0,
+  "min": 0,
+  "max": 15,
+  "initial": [
+   4
+  ],
+  "unitstyle": 0,
+  "varname": "sid_env_attack"
+ },
+ {
+  "name": "Amp Decay",
+  "short": "Decay",
+  "order": 40,
+  "type": 0,
+  "min": 0,
+  "max": 15,
+  "initial": [
+   8
+  ],
+  "unitstyle": 0,
+  "varname": "sid_env_decay"
+ },
+ {
+  "name": "Amp Sustain",
+  "short": "Sustain",
+  "order": 41,
+  "type": 0,
+  "min": 0,
+  "max": 15,
+  "initial": [
+   6
+  ],
+  "unitstyle": 0,
+  "varname": "sid_env_sustain"
+ },
+ {
+  "name": "Amp Release",
+  "short": "Release",
+  "order": 42,
+  "type": 0,
+  "min": 0,
+  "max": 15,
+  "initial": [
+   0
+  ],
+  "unitstyle": 0,
+  "varname": "sid_env_release"
+ },
+ {
+  "name": "Clocked Motion On",
+  "short": "Motion",
+  "order": 43,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "ON"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_on"
+ },
+ {
+  "name": "Clocked Motion Target",
+  "short": "Target",
+  "order": 44,
+  "type": 2,
+  "min": 0,
+  "max": 6,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "Cutoff",
+   "Reso",
+   "PWM Width",
+   "PWM Depth",
+   "Vib Depth",
+   "Trem Rate",
+   "Sustain"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_target"
+ },
+ {
+  "name": "Clocked Motion Division",
+  "short": "Rate",
+  "order": 45,
+  "type": 2,
+  "min": 0,
+  "max": 7,
+  "initial": [
+   3
+  ],
+  "enum": [
+   "1/4",
+   "1/8",
+   "1/8T",
+   "1/16",
+   "1/16T",
+   "1/16D",
+   "1/32",
+   "1/32T"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_division"
+ },
+ {
+  "name": "Clocked Motion Length",
+  "short": "Len",
+  "order": 46,
+  "type": 0,
+  "min": 1,
+  "max": 8,
+  "initial": [
+   8
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_length"
+ },
+ {
+  "name": "Clocked Motion Amount",
+  "short": "Amt",
+  "order": 47,
+  "type": 0,
+  "min": -31,
+  "max": 31,
+  "initial": [
+   16
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_amount"
+ },
+ {
+  "name": "Clocked Motion Step 1",
+  "short": "1",
+  "order": 48,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   100
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_1"
+ },
+ {
+  "name": "Clocked Motion Step 2",
+  "short": "2",
+  "order": 49,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   0
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_2"
+ },
+ {
+  "name": "Clocked Motion Step 3",
+  "short": "3",
+  "order": 50,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   75
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_3"
+ },
+ {
+  "name": "Clocked Motion Step 4",
+  "short": "4",
+  "order": 51,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   -25
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_4"
+ },
+ {
+  "name": "Clocked Motion Step 5",
+  "short": "5",
+  "order": 52,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   50
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_5"
+ },
+ {
+  "name": "Clocked Motion Step 6",
+  "short": "6",
+  "order": 53,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   -50
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_6"
+ },
+ {
+  "name": "Clocked Motion Step 7",
+  "short": "7",
+  "order": 54,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   25
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_7"
+ },
+ {
+  "name": "Clocked Motion Step 8",
+  "short": "8",
+  "order": 55,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   -75
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_8"
+ },
+ {
+  "name": "Velocity Target",
+  "short": "Velocity",
+  "order": 56,
+  "type": 2,
+  "min": 0,
+  "max": 7,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "Cutoff",
+   "Reso",
+   "PWM Width",
+   "PWM Depth",
+   "Vib Depth",
+   "Trem Rate",
+   "Sustain"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_velocity_target"
+ },
+ {
+  "name": "Velocity Amount",
+  "short": "Amt",
+  "order": 57,
+  "type": 0,
+  "min": -31,
+  "max": 31,
+  "initial": [
+   16
+  ],
+  "unitstyle": 0,
+  "varname": "sid_velocity_amount"
+ },
+ {
+  "name": "Aftertouch Target",
+  "short": "Pressure",
+  "order": 58,
+  "type": 2,
+  "min": 0,
+  "max": 7,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "Cutoff",
+   "Reso",
+   "PWM Width",
+   "PWM Depth",
+   "Vib Depth",
+   "Trem Rate",
+   "Sustain"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_pressure_target"
+ },
+ {
+  "name": "Aftertouch Amount",
+  "short": "Amt",
+  "order": 59,
+  "type": 0,
+  "min": -31,
+  "max": 31,
+  "initial": [
+   16
+  ],
+  "unitstyle": 0,
+  "varname": "sid_pressure_amount"
+ },
+ {
+  "name": "Clocked Motion Smooth",
+  "short": "Smooth",
+  "order": 60,
+  "type": 1,
+  "min": 0,
+  "max": 100,
+  "initial": [
+   0
+  ],
+  "unitstyle": 5,
+  "varname": "sid_motion_smooth"
+ },
+ {
+  "name": "Wheel Target",
+  "short": "Wheel",
+  "order": 61,
+  "type": 2,
+  "min": 0,
+  "max": 7,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "VIBRATO",
+   "Cutoff",
+   "Reso",
+   "PWM Width",
+   "PWM Depth",
+   "Vib Depth",
+   "Trem Rate",
+   "Sustain"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_wheel_target"
+ },
+ {
+  "name": "Wheel Amount",
+  "short": "Amt",
+  "order": 62,
+  "type": 0,
+  "min": -31,
+  "max": 31,
+  "initial": [
+   16
+  ],
+  "unitstyle": 0,
+  "varname": "sid_wheel_amount"
+ },
+ {
+  "name": "Bend Target",
+  "short": "Bend",
+  "order": 63,
+  "type": 2,
+  "min": 0,
+  "max": 7,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "Cutoff",
+   "Reso",
+   "PWM Width",
+   "PWM Depth",
+   "Vib Depth",
+   "Trem Rate",
+   "Sustain"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_bend_target"
+ },
+ {
+  "name": "Bend Amount",
+  "short": "Amt",
+  "order": 64,
+  "type": 0,
+  "min": -31,
+  "max": 31,
+  "initial": [
+   16
+  ],
+  "unitstyle": 0,
+  "varname": "sid_bend_amount"
+ },
+ {
+  "name": "Key Track Target",
+  "short": "Key",
+  "order": 65,
+  "type": 2,
+  "min": 0,
+  "max": 7,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "OFF",
+   "Cutoff",
+   "Reso",
+   "PWM Width",
+   "PWM Depth",
+   "Vib Depth",
+   "Trem Rate",
+   "Sustain"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_key_target"
+ },
+ {
+  "name": "Key Track Amount",
+  "short": "Amt",
+  "order": 66,
+  "type": 0,
+  "min": -31,
+  "max": 31,
+  "initial": [
+   16
+  ],
+  "unitstyle": 0,
+  "varname": "sid_key_amount"
+ },
+ {
+  "name": "Velocity to Cutoff Env",
+  "short": "Vel > Cutoff Env",
+  "order": 67,
+  "type": 1,
+  "min": 0,
+  "max": 100,
+  "initial": [
+   0
+  ],
+  "unitstyle": 5,
+  "varname": "sid_vel_env"
+ },
+ {
+  "name": "Preset Bank",
+  "short": "BANK",
+  "order": 100,
+  "type": 0,
+  "min": 1,
+  "max": 6,
+  "initial": [
+   1
+  ],
+  "unitstyle": 0,
+  "varname": "factory_bank"
+ },
+ {
+  "name": "Preset Slot",
+  "short": "PRESET",
+  "order": 101,
+  "type": 0,
+  "min": 1,
+  "max": 54,
+  "initial": [
+   1
+  ],
+  "unitstyle": 0,
+  "varname": "factory_preset"
+ },
+ {
+  "name": "MIDI Channel",
+  "short": "CH",
+  "order": 102,
+  "type": 0,
+  "min": 1,
+  "max": 16,
+  "initial": [
+   1
+  ],
+  "unitstyle": 0,
+  "varname": "midi_channel"
+ },
+ {
+  "name": "M4L Section",
+  "short": "M4L",
+  "order": 199,
+  "type": 2,
+  "min": 0,
+  "max": 2,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "CUT ENV",
+   "STEP MOD",
+   "EXPR"
+  ],
+  "unitstyle": 0,
+  "varname": "sid_m4l_page"
+ },
+ {
+  "name": "User Bank Name",
+  "short": "User Bank",
+  "order": 203,
+  "type": 3,
+  "invisible": 1,
+  "varname": "sid_user_bank"
+ },
+ {
+  "name": "Bank Menu",
+  "short": "Bank Menu",
+  "order": 204,
+  "type": 2,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "NO BANKS",
+   "NEW BANK…"
+  ],
+  "invisible": 2,
+  "unitstyle": 0,
+  "varname": "bank_title_menu"
+ },
+ {
+  "name": "Slot Menu",
+  "short": "Slot Menu",
+  "order": 205,
+  "type": 2,
+  "min": 0,
+  "max": 53,
+  "initial": [
+   0
+  ],
+  "enum": [
+   "01 INIT 01",
+   "02 INIT 02",
+   "03 INIT 03",
+   "04 INIT 04",
+   "05 INIT 05",
+   "06 INIT 06",
+   "07 INIT 07",
+   "08 INIT 08",
+   "09 INIT 09",
+   "10 INIT 10",
+   "11 INIT 11",
+   "12 INIT 12",
+   "13 INIT 13",
+   "14 INIT 14",
+   "15 INIT 15",
+   "16 INIT 16",
+   "17 INIT 17",
+   "18 INIT 18",
+   "19 INIT 19",
+   "20 INIT 20",
+   "21 INIT 21",
+   "22 INIT 22",
+   "23 INIT 23",
+   "24 INIT 24",
+   "25 INIT 25",
+   "26 INIT 26",
+   "27 INIT 27",
+   "28 INIT 28",
+   "29 INIT 29",
+   "30 INIT 30",
+   "31 INIT 31",
+   "32 INIT 32",
+   "33 INIT 33",
+   "34 INIT 34",
+   "35 INIT 35",
+   "36 INIT 36",
+   "37 INIT 37",
+   "38 INIT 38",
+   "39 INIT 39",
+   "40 INIT 40",
+   "41 INIT 41",
+   "42 INIT 42",
+   "43 INIT 43",
+   "44 INIT 44",
+   "45 INIT 45",
+   "46 INIT 46",
+   "47 INIT 47",
+   "48 INIT 48",
+   "49 INIT 49",
+   "50 INIT 50",
+   "51 INIT 51",
+   "52 INIT 52",
+   "53 INIT 53",
+   "54 INIT 54"
+  ],
+  "invisible": 2,
+  "unitstyle": 0,
+  "varname": "sid_slot"
+ },
+ {
+  "name": "Panel Stored",
+  "short": "STORED",
+  "order": 220,
+  "type": 0,
+  "min": 0,
+  "max": 1,
+  "initial": [
+   0
+  ],
+  "invisible": 1,
+  "unitstyle": 0,
+  "varname": "panel_stored"
+ }
+]

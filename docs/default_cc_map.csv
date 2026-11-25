@@ -1,0 +1,38 @@
+destination,cc,native_range,cc_encoding
+Vibrato wheel,1,0-127,direct
+Vibrato frequency,77,0-31,value*4
+Vibrato rate,76,1-32,(value-1)*4
+Vibrato type,79,0-3,value*32
+Vibrato delay,78,0-31,value*4
+Vibrato retrig,80,0-1,"0,127"
+Vibrato on,81,0-1,"0,127"
+Filter cutoff,74,0-127,direct (SLO stores nearest 0-31 step)
+Filter resonance,71,0-15,value*8
+Filter rate,82,0-31,value*4
+Filter cycle,83,0-4,"0,26,51,77,102"
+Filter mode,85,0-3,value*32
+Filter retrig,86,0-2,"0,43,86"
+PWM width,102,0-127,direct (SLO stores nearest 0-31 step)
+PWM rate,103,0-31,value*4
+PWM depth,104,0-31,value*4
+PWM cycle,105,0-3,value*32
+PWM retrig,106,0-2,"0,43,86"
+PWM on,107,0-1,"0,127"
+Play mode,22,0-6,value*19
+Waveform,28,0-7,value*16
+Arp speed,31,1-31,"1 becomes 0; otherwise value*4"
+Arp direction,23,0-2,"0,43,86"
+Portamento on,30,0-1,"0,127"
+Pitch-bend CC destination,24,0-127,not generated; actual pitch bend passes through
+Ring modulation on,25,0-1,"0,127"
+Hard sync on,26,0-1,"0,127"
+Tremolo rate,14,0-31,value*4
+Tremolo on,15,0-1,"0,127"
+Click on,27,0-1,"0,127"
+Attack,73,0-15,value*8
+Decay,75,0-15,value*8
+Sustain,70,0-15,value*8
+Release,72,0-15,value*8
+Envelope retrig,67,0-2,"0,43,86"
+Preset select,29,0-127,device uses Program Change instead
+

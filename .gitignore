@@ -1,0 +1,17 @@
+.DS_Store
+*.maxbackup
+*.maxsnap
+*.asd
+node_modules/
+
+# Build output (attach release zips to GitHub releases instead)
+dist/
+out/
+
+# Private: local history, SID SYNTH materials and working notes
+archive/
+research/
+CLAUDE_HANDOFF.md
+docs/PROJECT_HISTORY.md
+docs/SOURCES.md
+docs/verification/
