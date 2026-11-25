@@ -1,4 +1,4 @@
-# SID SYNTH Controller for Ableton Live (v{{VERSION}})
+# SID SYNTH Controller for Ableton Live: User Guide
 
 A Max for Live MIDI effect that edits, automates and stores sounds for
 LukHash's **SID SYNTH**, the Commodore 64 synthesizer, over MIDI. Every sound

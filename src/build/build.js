@@ -49,7 +49,7 @@ const readDevice = file => fs.readFileSync(path.join(DEVICE_DIR, file), 'utf8');
 fs.writeFileSync(path.join(OUT_DIR, 'sid_ui_logic.js'), readDevice('sid_palette.js') + '\n' + readDevice('sid_ui_logic.js'));
 fs.writeFileSync(path.join(OUT_DIR, 'sid_banks.js'), readDevice('sid_banks.js'));
 fs.writeFileSync(path.join(OUT_DIR, 'README.md'),
-  fs.readFileSync(path.join(ROOT, 'docs', 'USER_GUIDE.md'), 'utf8').replace(/\{\{VERSION\}\}/g, VERSION));
+  fs.readFileSync(path.join(ROOT, 'docs', 'USER_GUIDE.md'), 'utf8').replace(/^# (.+)$/m, `# $1 (v${VERSION})`));
 fs.copyFileSync(path.join(ROOT, 'docs', 'HARDWARE_SETUP.md'), path.join(OUT_DIR, 'SETUP_GUIDE.md'));
 fs.copyFileSync(path.join(ROOT, 'docs', 'default_cc_map.csv'), path.join(OUT_DIR, 'default_cc_map.csv'));
 
