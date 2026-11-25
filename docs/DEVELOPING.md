@@ -61,7 +61,8 @@ conditional control, and the rendered text rather than object coordinates
 ## Releasing
 
 1. Update `version` in `package.json` (the panel's version label follows it)
-   and add a `CHANGELOG.md` entry.
+   and turn the changelog's `## Unreleased` section into the new version's
+   (see "Keeping the changelog").
 2. `npm run check`, then the Live checks above on the exact build. Install it
    the way users will (drag the `SID SYNTH Controller` folder onto
    `Max MIDI Effect` in Live's browser) and load it from there.
@@ -85,6 +86,31 @@ conditional control, and the rendered text rather than object coordinates
 
 Versions: a change to the device (`src/`) is a new version. Documentation-only
 changes need no new release, but a new zip picks them up.
+
+## Keeping the changelog
+
+`CHANGELOG.md` is for people who use the device and for whoever maintains it
+next. Update it in the same commit as the change it describes.
+
+- **Where:** new entries go under `## Unreleased` at the top. Create that
+  section if it is missing. Released sections are history: fix them only when
+  they are wrong.
+- **What:** anything a user could notice (controls, MIDI sent, banks, install,
+  docs they follow) and anything a maintainer must know (build, packaging,
+  compatibility). Leave out work that never shipped and private files.
+- **How:** one bullet per change. Start with a short bold phrase saying what
+  changed, then the effect for the user, then what changed technically if it
+  matters later. Name controls and messages exactly as the panel and code do.
+- **Compatibility:** say plainly when saved Live Sets, automation or banks are
+  affected: an appended parameter, a changed range or encoding, a moved
+  folder, and what old sets do.
+- **Verification:** say what was checked (offline tests, in Live, with the
+  C64) and what was not.
+- **At a release:** rename `## Unreleased` to `## v<version> — current`,
+  remove `— current` from the previous version, and start the section with one
+  line summing the release. The version matches `package.json` and the tag.
+  When the device is unchanged, say so (as in "packaging and documentation
+  only").
 
 ## When SID SYNTH changes
 

@@ -1,14 +1,16 @@
 # Changelog
 
-This file records the major functional and design stages. The complete set of intermediate artifacts is preserved under `archive/builds/`.
+Changes by version, newest first. The rules for keeping it are in `docs/DEVELOPING.md` ("Keeping the changelog").
 
-## Since v1.0.0 (unreleased)
+## Unreleased
 
 Packaging and documentation only; the device is unchanged.
 
 - **No version in any folder name.** The build writes `dist/SID SYNTH Controller/` and the release zip, `SID-SYNTH-Controller-v<version>.zip`, unzips to a folder of that name. An installed copy keeps its path across updates, so Live Sets that use it keep finding its scripts. The zip is made with plain `zip` (no `__MACOSX` entries).
 - **Install steps rewritten** after testing in Live 12: drag the whole folder from Finder onto `Presets/MIDI Effects/Max MIDI Effect` in the User Library list of Live's browser, which copies it with every file. Loading the `.amxd` straight from Finder or by dropping it on Live's icon copies nothing and ties the device to that folder.
-- The README and user guide explain that the C64 shows patch names from the bank it has loaded, and the user guide's title in the repository no longer shows a `{{VERSION}}` placeholder.
+- **C64 patch names explained.** The README and user guide explain that the C64 shows patch names from the bank it has loaded, and the user guide's title in the repository no longer shows a `{{VERSION}}` placeholder.
+- **Developer guide.** `docs/DEVELOPING.md` now covers the whole release (tag, push, GitHub release) and what to check when SID SYNTH itself changes, and `tools/devinstall.sh` installs a test build under a unique name.
+- **Changelog rules.** `docs/DEVELOPING.md` ("Keeping the changelog") says where and how entries are written, and a `CLAUDE.md` asks Claude Code to keep this file current in the same commit as each change. The v1.0.0 entry is corrected (C64 SYNC, where the version label sits, no status line).
 
 ## v1.0.0 — current
 
@@ -16,17 +18,17 @@ First public release. Functionally the same as v0.26.0.
 
 - Every sound setting SID SYNTH accepts over MIDI on one panel, as automatable Live parameters, using SID SYNTH's default CC map.
 - Banks as native C64 `.SLO` files in the `SID SYNTH Banks` folder of Live's User Library (SID SYNTH's own PRESETS1-5 once copied there): browse, save to any slot, create banks; rename and delete them in the folder.
-- The sound is stored with the Live Set and sent to the C64 when the set opens; RESEND, PANIC and RANDOM.
+- The sound is stored with the Live Set and sent to the C64 when the set opens; C64 SYNC, RANDOM and PANIC.
 - Live-side layers: Cutoff Envelope, Step Mod (tempo-synced, with Smooth) and Expression (velocity, aftertouch, mod wheel, pitch bend, key tracking).
 - Built from source with Node.js; `npm run check` builds, verifies and tests.
-- The device is named **SID SYNTH Controller** (no version in its name); the version is shown small under the name field.
+- The device is named **SID SYNTH Controller** (no version in its name); the version is shown small at the right of the EDITED row.
 - **RESEND TO C64 is now C64 SYNC** (same action: Program Change for the slot, then every CC).
 - **Program strip relaid out** as one tall cell: **PATCH NAME** and the name field at the top (so it reads as the sound's name rather than another selector), then a **PATCH SELECT** section (bank menu with folder button, slot menu, `<` `>` SAVE), then EDITED with the version, C64 SYNC, RANDOM and PANIC. The status line is gone; status messages go to Max's console, and in save mode the slot menu shows what STORE replaces.
 - **Banks moved into Live's User Library**: `<User Library>/Presets/MIDI Effects/Max MIDI Effect/SID SYNTH Banks`, beside the presets of other Max MIDI effects, instead of `~/Music/SID SYNTH Banks`. The helper reads the User Library's location from Live's `Library.cfg` (newest Live version), so a library moved in Live's Settings is followed, and falls back to Live's default (`~/Music/Ableton/User Library`, `Documents\Ableton\User Library` on Windows). Banks in the old folder are not moved; copy them across.
 - **RENAME BANK removed.** Rename (and delete) banks in the folder the folder button opens; when the bank in use is renamed there, the device follows it (one file gone and one new in the same listing) and stores the new name with the set. The bank menu is now your banks plus `NEW BANK…`, and the Node helper no longer has a `rename` command.
 - **No yellow Max tooltips.** Buttons, menus and the name field had a Max `hint` repeating their Info View text; only the Info View text remains.
 - **Folder button** beside the bank menu opens the bank folder in Finder (Explorer on Windows), via the Node helper's new `openbanks` command (not `reveal`, which `node.script` handles itself); the full path is printed to Max's console.
-- **Info View help everywhere:** buttons, the name field, the step bars and envelope editor now carry Live Info View help (annotations; their old Max tooltips did not reach the Info View); section titles, the status line, EDITED and the SYNC readout explain themselves through invisible help zones (Live shows no Info View for text); and the help for Speed, the expression targets and the slot menu covers the clock-division readout, Sustain as a target and Program Change following. `npm run verify` fails if a visible control has no help.
+- **Info View help everywhere:** buttons, the name field, the step bars and envelope editor now carry Live Info View help (annotations; their old Max tooltips did not reach the Info View); section titles, EDITED and the SYNC readout explain themselves through invisible help zones (Live shows no Info View for text); and the help for Speed, the expression targets and the slot menu covers the clock-division readout, Sustain as a target and Program Change following. `npm run verify` fails if a visible control has no help.
 
 ## v0.26.0
 
