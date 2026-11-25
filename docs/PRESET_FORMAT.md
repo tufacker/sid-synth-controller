@@ -87,7 +87,7 @@ Cutoff and PWM Width are sent over MIDI as full 0–127 values for smooth automa
 
 - Every bank is a file in the bank folder; the device embeds none.
 - A new bank holds 54 INIT records (the panel's default values; byte 24, which has no CC, is 3).
-- SAVE PATCH replaces the selected USER record and nine-character name.
-- The whole 54-slot bank is then written to the linked `.SLO` path.
+- SAVE, then STORE, replaces the chosen slot's record and nine-character name.
+- The whole 54-slot bank is then written back to its `.SLO` file.
 - The Max device cannot save the patch to C64 disk over MIDI; the resulting file must be placed into a D64 as a PRG and loaded in SID SYNTH.
 
