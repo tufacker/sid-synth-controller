@@ -69,6 +69,12 @@ to Max's console.
 ## Sending to the C64
 
 - Every change on the panel is sent at once.
+- SID SYNTH holds one bank, and its screen shows names from that bank. The
+  device sends Program Change for the slot number and then every setting, so
+  the C64 plays the panel's sound whichever bank it has loaded, but it shows the
+  name stored in that slot of its own bank. Load the same bank on the C64 as
+  the one selected in the bank menu (copying a bank made in Live to the C64's
+  disk first) and the names match too.
 - `C64 SYNC` sends the panel's sound again: Program Change for the slot (so
   the C64 shows that slot), then every setting. Use it after restarting SID
   SYNTH or changing something with the C64's own keys.

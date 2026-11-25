@@ -61,6 +61,21 @@ same tools.
 `NEW BANK…` in the bank menu creates a bank. To rename or delete one, do it in
 the folder (the folder button opens it); the bank menu updates at once.
 
+### Load the same bank on the C64
+
+SID SYNTH holds one bank at a time, and its screen shows patch names from that
+bank. The device can't load a bank onto the C64 or read which one is loaded:
+picking a slot sends a Program Change for the slot number, then every setting.
+So the C64 always *plays* the sound on the panel, but the name it shows is
+whatever sits in that slot of the bank it has loaded. If you're using
+`PRESETS2` in Live while the C64 has `PRESETS1` loaded, the C64 shows
+PRESETS1's names for PRESETS2's sounds.
+
+For the names to match, load the same bank on the C64 (from SID SYNTH's disk
+menu) as the one selected in the bank menu. A bank you made or changed in Live
+has to be copied to the C64's disk first (see above). This affects only the
+C64's display. The sound, and the Live Set that stores it, are right either way.
+
 ## Building
 
 The device is generated from source by Node.js (18 or later, no dependencies):
