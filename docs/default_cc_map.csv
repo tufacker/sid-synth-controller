@@ -12,10 +12,10 @@ Filter rate,82,0-31,value*4
 Filter cycle,83,0-4,"0,26,51,77,102"
 Filter mode,85,0-3,value*32
 Filter retrig,86,0-2,"0,43,86"
-PWM width,102,0-127,direct (SLO stores nearest 0-31 step)
+PWM width,102,0-127,"direct, never below 1 (SLO stores nearest 0-31 step)"
 PWM rate,103,0-31,value*4
 PWM depth,104,0-31,value*4
-PWM cycle,105,0-3,value*32
+PWM cycle,105,0-3,value*32 (SLO stores 1-4)
 PWM retrig,106,0-2,"0,43,86"
 PWM on,107,0-1,"0,127"
 Play mode,22,0-6,value*19
@@ -33,6 +33,6 @@ Attack,73,0-15,value*8
 Decay,75,0-15,value*8
 Sustain,70,0-15,value*8
 Release,72,0-15,value*8
-Envelope retrig,67,0-2,"0,43,86"
+Envelope retrig,87,0-2,"0,43,86"
 Preset select,29,0-127,device uses Program Change instead
 

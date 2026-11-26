@@ -70,6 +70,13 @@ Cutoff Envelope, Step Mod and Expression offset one CC around its stored value
 value, so turning a layer off restores the sound. Targets share one list;
 new targets are appended so stored menu values keep their meaning.
 
+Step Mod's clock is a tempo-relative `metro` quantized to its Rate. On each
+tick the patch reads Live's song position (`transport` total ticks) and
+`motiontick(ticks)` turns it into a step (`MOTION_DIVISION_TICKS`, 480 per
+quarter note), so the pattern is locked to the bar grid from bar 1 rather than
+counted from when playback started. Stopping the transport calls
+`motionreset`, which releases the target.
+
 ## The panel logic (`sid_ui_logic.js`)
 
 Presentation only. It mutes controls that do nothing in the current mode (for

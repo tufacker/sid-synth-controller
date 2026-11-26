@@ -77,7 +77,7 @@ const CONTROLS=[
   {key:'motionon',varname:'sid_motion_on',param:'Clocked Motion On',label:'Motion',type:'toggle',initial:0,text:'',x:492,y:24,w:9,h:9},
   {key:'motiontarget',varname:'sid_motion_target',param:'Clocked Motion Target',label:'Target',type:'menu',enums:TARGETS,initial:0,x:492,y:45,w:58,h:14,labelRect:[490,33,60],labelVar:'lbl_motion_target'},
   {key:'motiondivision',varname:'sid_motion_division',param:'Clocked Motion Division',label:'Rate',type:'menu',enums:['1/4','1/8','1/8T','1/16','1/16T','1/16D','1/32','1/32T'],initial:3,x:553,y:45,w:38,h:14,labelRect:[551,33,40],labelVar:'lbl_motion_division'},
-  {key:'motionlength',varname:'sid_motion_length',param:'Clocked Motion Length',label:'Len',type:'bar',min:1,max:8,initial:8,x:594,y:45,w:30,h:14,labelRect:[592,33,32],labelVar:'lbl_motion_length'},
+  {key:'motionlength',varname:'sid_motion_length',param:'Clocked Motion Length',label:'Len',type:'bar',min:1,max:16,initial:8,x:594,y:45,w:30,h:14,labelRect:[592,33,32],labelVar:'lbl_motion_length'},
   {key:'motionamount',varname:'sid_motion_amount',param:'Clocked Motion Amount',label:'Amt',type:'bar',min:-31,max:31,initial:16,x:627,y:45,w:33,h:14,labelRect:[625,33,36],labelVar:'lbl_motion_amount'},
   ...[100,0,75,-25,50,-50,25,-75].map((initial,index)=>({key:`motionstep${index+1}`,varname:`sid_motion_step_${index+1}`,
     param:`Clocked Motion Step ${index+1}`,label:`${index+1}`,type:'slider',min:-100,max:100,initial,showname:0,orientation:0,
@@ -99,13 +99,18 @@ const CONTROLS=[
   {key:'bendamount',varname:'sid_bend_amount',param:'Bend Amount',label:'Amt',type:'bar',min:-31,max:31,initial:16,x:624,y:105,w:36,h:14},
   {key:'keytarget',varname:'sid_key_target',param:'Key Track Target',label:'Key',type:'menu',enums:EXPRESSION_TARGETS,initial:0,x:536,y:125,w:84,h:14,labelRect:[490,125,44],labelVar:'lbl_key_row'},
   {key:'keyamount',varname:'sid_key_amount',param:'Key Track Amount',label:'Amt',type:'bar',min:-31,max:31,initial:16,x:624,y:125,w:36,h:14},
-  {key:'velenv',varname:'sid_vel_env',param:'Velocity to Cutoff Env',label:'Vel > Cutoff Env',type:'bar',min:0,max:100,initial:0,ptype:1,unitstyle:5,x:624,y:145,w:36,h:14,labelRect:[490,145,130],labelVar:'lbl_velenv_row'}
+  {key:'velenv',varname:'sid_vel_env',param:'Velocity to Cutoff Env',label:'Vel > Cutoff Env',type:'bar',min:0,max:100,initial:0,ptype:1,unitstyle:5,x:624,y:145,w:36,h:14,labelRect:[490,145,130],labelVar:'lbl_velenv_row'},
+
+  // STEP MOD steps 9-16, added in v1.0.1 (defaults repeat steps 1-8)
+  ...[100,0,75,-25,50,-50,25,-75].map((initial,index)=>({key:`motionstep${index+9}`,varname:`sid_motion_step_${index+9}`,
+    param:`Clocked Motion Step ${index+9}`,label:`${index+9}`,type:'slider',min:-100,max:100,initial,showname:0,orientation:0,
+    hidePresentation:true,x:850+(index+8)*40,y:94,w:32,h:66}))
 ];
 
 // Live Info View help, from the SID SYNTH manual.
 const HELP={
   playmode:'Selects the SID voice mode. ARP and ARP+ cycle held notes; POLY gives true SID polyphony; MONO uses one voice; OCT, OCT+, and 5TH layer a second voice at a fixed interval.',
-  arpspeed:'Sets arpeggiator speed in ARP/ARP+ and glide rate for Portamento in the other modes. When the C64 follows MIDI clock, ARP/ARP+ treat it as a note division (1/1 to 1/64 triplet, two steps per division), shown beside ARPEGGIO as SYNC.',
+  arpspeed:'Sets arpeggiator speed in ARP/ARP+ and glide rate for Portamento in the other modes. When the C64 follows MIDI clock, ARP/ARP+ treat it as a note division (1/1 to 1/64 triplet, two steps per division), shown beside ARPEGGIO as SYNC. Locked outside ARP/ARP+ while Portamento is off, where SID SYNTH ignores it.',
   arpdir:'Chooses up, down, or alternating note order for ARP and ARP+. It is inactive in the other voice modes, and a fresh MIDI chord starts predictably from the direction-dependent edge note.',
   porta:'Glides new notes to pitch at the Speed setting instead of jumping. It works in the single-voice modes and independently per voice in POLY, but is unavailable in ARP and ARP+.',
 
@@ -156,7 +161,7 @@ const HELP={
   motionon:'Enables Step Mod, the Live-side step modulator. It sends one documented CC offset per selected musical step and restores the underlying patch value when disabled.',
   motiontarget:'Selects which SID SYNTH setting Step Mod offsets: Cutoff, Resonance, PWM Width, PWM Depth, Vibrato Depth, Tremolo Rate, or Sustain (a fade: lowering it fades held notes, raising it is heard from the next note).',
   motiondivision:'Sets the Step Mod step interval relative to Live tempo, including straight, triplet, and dotted divisions.',
-  motionlength:'Sets how many of the eight Step Mod steps are used before the pattern repeats.',
+  motionlength:'Sets how many of the 16 Step Mod steps are used before the pattern repeats.',
   motionamount:'Sets the maximum bipolar offset applied by the Step Mod steps. Each step scales this amount by its own percentage.',
   motionsmooth:'Glides between steps instead of jumping. 0% gives hard steps; higher values ease from one step to the next over that share of the step, and 100% joins the steps into one continuous, tempo-synced wave, like a drawable LFO.',
 
@@ -172,7 +177,7 @@ const HELP={
   keyamount:'Sets the bipolar depth of key tracking at four octaves from C3.',
   velenv:'Scales the Cutoff Envelope depth by note velocity. 0% ignores velocity; 100% makes the sweep fully velocity-sensitive, so soft notes barely open the filter and hard notes open it fully.'
 };
-for (let step=1;step<=8;step++) {
+for (let step=1;step<=16;step++) {
   HELP[`motionstep${step}`]=`Sets Clocked Motion step ${step} from -100% to +100% of Amount. The step offsets the selected target without rewriting the stored C64 patch value.`;
 }
 for (const control of CONTROLS) if (control.key) control.info=HELP[control.key];

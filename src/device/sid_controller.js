@@ -36,10 +36,10 @@ var cc = {
   pwmretrig: 106, pwmon: 107, playmode: 22, wave: 28,
   arpspeed: 31, arpdir: 23, porta: 30, ring: 25, sync: 26,
   tremrate: 14, tremon: 15, click: 27, attack: 73, decay: 75,
-  sustain: 70, release: 72, envretrig: 67
+  sustain: 70, release: 72, envretrig: 87
 };
 
-// The order a whole sound is sent in.
+// The order the panel shows a recalled sound in.
 var order = [
   "playmode", "arpspeed", "arpdir", "porta",
   "attack", "decay", "sustain", "release", "envretrig",
@@ -47,6 +47,24 @@ var order = [
   "pwmwidth", "pwmrate", "pwmdepth", "pwmcycle", "pwmretrig", "pwmon",
   "filtermode", "cutoff", "resonance", "filterrate", "filtercycle", "filterretrig",
   "vibwheel", "vibfreq", "vibrate", "vibtype", "vibdelay", "vibretrig", "vibon"
+];
+
+// The order a whole sound is sent in (slot recall, an opened Live Set, C64
+// SYNC, RANDOM), from LukHash. SID SYNTH drops any setting that is greyed in
+// its current state, which the device cannot read, so the C64 is first put
+// into modes that unlock everything: ARP for Speed and Dir, MONO for Env
+// Retrig and Portamento (Speed is then the glide time), Ring Mod off so the
+// waveform is taken. The sound's own Play Mode goes last; the C64 steps through
+// the modes on the way, so held notes stop. A step is a control name, or
+// [name, value] for a fixed value (Play Mode 0 = ARP, 2 = MONO).
+var sendOrder = [
+  ["vibwheel", 0], ["playmode", 0], "arpspeed", "arpdir", ["playmode", 2],
+  "envretrig", "porta", ["ring", 0], "wave", "sync", "ring",
+  "filtermode", "cutoff", "resonance", "attack", "decay", "sustain", "release",
+  "pwmwidth", "pwmrate", "pwmdepth", "pwmcycle", "pwmretrig", "pwmon",
+  "filterrate", "filtercycle", "filterretrig", "tremrate", "tremon",
+  "vibrate", "vibdelay", "vibtype", "vibfreq", "vibon", "click", "vibretrig",
+  "playmode"
 ];
 
 var state = {
@@ -66,9 +84,11 @@ function clamp(v, lo, hi) {
 
 // Panel value -> CC value. Cutoff and PWM Width use SID SYNTH's full 0-127 MIDI
 // resolution; a saved .SLO slot keeps only their nearest 32-step value.
+// PWM Width never goes out as 0, which SID SYNTH plays as silence.
 function encode(name, value) {
   var v = Math.round(value);
-  if (name === "cutoff" || name === "pwmwidth" || name === "vibwheel") return clamp(value, 0, 127);
+  if (name === "pwmwidth") return clamp(value, 1, 127);
+  if (name === "cutoff" || name === "vibwheel") return clamp(value, 0, 127);
   if (name === "wave") return clamp(v, 0, 7) * 16;
   if (name === "filtermode" || name === "vibtype" || name === "pwmcycle") return clamp(v, 0, 3) * 32;
   if (name === "attack" || name === "decay" || name === "sustain" || name === "release" || name === "resonance") {
@@ -106,9 +126,9 @@ var loadWave = {pulse:1, saw:0, tri:0, noise:0};
 // ---------------------------------------------------------------------------
 // MIDI out
 // ---------------------------------------------------------------------------
-function emitCC(name) {
+function emitCC(name, value) {
   if (loading || !cc.hasOwnProperty(name) || !state.hasOwnProperty(name)) return;
-  outlet(MIDI, 0xB0 + midiChannel - 1, cc[name], encode(name, state[name]));
+  outlet(MIDI, 0xB0 + midiChannel - 1, cc[name], encode(name, arguments.length > 1 ? value : state[name]));
 }
 
 function program(slot) {
@@ -116,9 +136,12 @@ function program(slot) {
   outlet(MIDI, 0xC0 + midiChannel - 1, clamp(slot, 1, 54) - 1);
 }
 
-// Every CC of the sound, then the performance layers on top.
+// Every CC of the sound in sendOrder, then the performance layers on top.
 function sendAllControls() {
-  for (var i = 0; i < order.length; i++) emitCC(order[i]);
+  for (var i = 0; i < sendOrder.length; i++) {
+    if (typeof sendOrder[i] === "string") emitCC(sendOrder[i]);
+    else emitCC(sendOrder[i][0], sendOrder[i][1]);
+  }
   refreshPerformance(true);
 }
 
@@ -200,7 +223,7 @@ function applyRecord(record) {
   state.vibtype = record[19] & 3; state.vibretrig = (record[19] & 4) ? 1 : 0; state.vibdelay = record[20];
   state.playmode = recordPlayMode(record); state.arpspeed = record[25]; state.arpdir = record[26];
   state.ring = record[27]; state.sync = record[28]; state.click = record[29]; state.porta = record[30];
-  state.tremon = record[31]; state.tremrate = record[32]; state.pwmcycle = record[33]; state.envretrig = record[34];
+  state.tremon = record[31]; state.tremrate = record[32]; state.pwmcycle = clamp(record[33] - 1, 0, 3); state.envretrig = record[34];
   state.vibwheel = 0;
   syncWavePartsFromState();
 }
@@ -231,7 +254,7 @@ function stateToRecord(previous) {
   record[25] = clamp(state.arpspeed, 1, 31); record[26] = clamp(state.arpdir, 0, 2);
   record[27] = state.ring ? 1 : 0; record[28] = state.sync ? 1 : 0; record[29] = state.click ? 1 : 0;
   record[30] = state.porta ? 1 : 0; record[31] = state.tremon ? 1 : 0;
-  record[32] = clamp(state.tremrate, 0, 31); record[33] = clamp(state.pwmcycle, 0, 3);
+  record[32] = clamp(state.tremrate, 0, 31); record[33] = clamp(state.pwmcycle, 0, 3) + 1;
   record[34] = clamp(state.envretrig, 0, 2);
   return record;
 }
@@ -826,7 +849,7 @@ function bankerror() {
 // Live-side performance layers. Each offsets one documented CC around the
 // stored value (which stays the patch value) and restores it when released.
 //   Cutoff Envelope  note-triggered ADSR on Cutoff
-//   Step Mod         eight tempo-synced steps (parameters are named Clocked Motion)
+//   Step Mod         16 tempo-synced steps (parameters are named Clocked Motion)
 //   Expression       Velocity, Pressure, Wheel, Bend and Key tracking
 // ---------------------------------------------------------------------------
 
@@ -847,11 +870,14 @@ var filterEnv = {
 
 var motion = {
   on:0, target:0, amount:16, length:8, step:-1,
-  values:[100,0,75,-25,50,-50,25,-75],
+  values:[100,0,75,-25,50,-50,25,-75, 100,0,75,-25,50,-50,25,-75],
   // Smooth: 0 = hard steps; otherwise each step glides from the current
   // position to its value over smooth% of the measured step length.
-  smooth:0, from:0, stepStart:0, stepMs:125, lastTick:0
+  smooth:0, from:0, stepStart:0, stepMs:125, lastTick:0,
+  // Rate menu index; the step length in Live's ticks (480 per quarter note).
+  division:3
 };
+var MOTION_DIVISION_TICKS = [480, 240, 160, 120, 80, 180, 60, 40]; // 1/4 1/8 1/8T 1/16 1/16T 1/16D 1/32 1/32T
 
 // Targets are indexes into performanceTargets, -1 = off.
 var expression = {
@@ -1021,14 +1047,22 @@ function fenvtick() {
   emitPerformance("cutoff", false);
 }
 
-// Each Step Mod step, from a tempo-synced metro.
-function motiontick() {
+// Each Step Mod step, from a tempo-synced metro. The patch passes Live's song
+// position in ticks, and the step is worked out from it: step 1 always falls
+// on the same grid points (every Len steps from bar 1), however playback was
+// started, looped or Step Mod switched on. Without a position it just advances.
+function motiontick(ticks) {
   if (!motion.on) return;
-  var now = Date.now(), gap;
+  var now = Date.now(), gap, index;
   if (motion.lastTick > 0) { gap = now - motion.lastTick; if (gap > 5 && gap < 4000) motion.stepMs = gap; }
   motion.lastTick = now;
   motion.from = motionOffsetPercent();
-  motion.step = (motion.step + 1) % motion.length;
+  ticks = Number(ticks);
+  if (arguments.length > 0 && isFinite(ticks) && ticks >= 0) {
+    // The quantized metro fires on the grid; round away tiny timing error.
+    index = Math.round(ticks / MOTION_DIVISION_TICKS[motion.division]);
+    motion.step = index % motion.length;
+  } else motion.step = (motion.step + 1) % motion.length;
   motion.stepStart = now;
   emitPerformance(targetName(motion.target), true);
   outlet(UI, "motionstep", motion.step);
@@ -1040,7 +1074,7 @@ function motionglide() {
   emitPerformance(targetName(motion.target), false);
 }
 
-// Transport (re)start: begin again at step 1.
+// Transport stopped: Step Mod lets go of its target until playback resumes.
 function motionreset() {
   motion.step = -1; motion.from = 0; motion.lastTick = 0;
   if (motion.on) emitPerformance(targetName(motion.target), true);
@@ -1068,9 +1102,9 @@ function setMotion(name, value) {
     motion.target = clamp(value, 0, performanceTargets.length - 1); motion.step = -1;
   } else if (name === "motionamount") motion.amount = clamp(value, -31, 31);
   else if (name === "motionsmooth") motion.smooth = clamp(value, 0, 100);
-  else if (name === "motionlength") { motion.length = clamp(value, 1, 8); motion.step = -1; }
+  else if (name === "motionlength") { motion.length = clamp(value, 1, motion.values.length); motion.step = -1; }
   else if (name.indexOf("motionstep") === 0) {
-    motion.values[clamp(Number(name.substring(10)) - 1, 0, 7)] = clamp(value, -100, 100);
+    motion.values[clamp(Number(name.substring(10)) - 1, 0, motion.values.length - 1)] = clamp(value, -100, 100);
   }
   if (oldTarget) emitPerformance(oldTarget, true);
   if (motion.on) emitPerformance(targetName(motion.target), true);
@@ -1112,8 +1146,9 @@ function set(name, value) {
   name = String(name);
   value = Number(value);
   if (name.indexOf("fenv") === 0) { setFilterEnv(name, value); return; }
-  // Step Mod's division only retimes the patch's metro.
-  if (name === "motiondivision") return;
+  // Step Mod's division retimes the patch's metro; the controller only needs
+  // it to turn song position into a step.
+  if (name === "motiondivision") { motion.division = clamp(value, 0, MOTION_DIVISION_TICKS.length - 1); return; }
   if (name.indexOf("motion") === 0) { setMotion(name, value); return; }
   if (name.indexOf("vel") === 0 || name.indexOf("press") === 0 || name.indexOf("wheel") === 0 ||
       name.indexOf("bend") === 0 || name.indexOf("key") === 0) { setExpression(name, value); return; }

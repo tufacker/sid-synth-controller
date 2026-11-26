@@ -108,7 +108,7 @@ offset from the stored value and restored when released, and are saved with the
 Live Set rather than in the C64 sound.
 
 - **CUT ENV**: a note-triggered ADSR on Cutoff, with a bipolar Amount.
-- **STEP MOD**: eight tempo-synced steps on Cutoff, Resonance, PWM Width, PWM
+- **STEP MOD**: 16 tempo-synced steps on Cutoff, Resonance, PWM Width, PWM
   Depth, Vibrato Depth, Tremolo Rate or Sustain. `Smooth` glides between steps;
   at 100% it is a drawable, tempo-synced LFO. Its parameters are named Clocked
   Motion in Live.
@@ -126,6 +126,11 @@ sustain level.
 - Values are shown in decimal. Cutoff and PWM Width use SID SYNTH's full 0-127
   MIDI range; a saved slot keeps their nearest 32-step value.
 - Ring Mod and Hard Sync are mutually exclusive, as on the C64.
+- Controls the C64 ignores in the current mode are locked: Speed outside
+  ARP/ARP+ with Portamento off, Dir outside ARP/ARP+, Portamento in ARP/ARP+,
+  Env Retrig in ARP, ARP+ and POLY, and the waveform while Ring Mod is on.
+- When a whole sound is sent, the C64's play mode steps through a few modes
+  so every setting is accepted, and held notes stop. That's normal.
 - In ARP and ARP+, the line beside ARPEGGIO shows the note division Speed selects
   when the C64 follows MIDI clock (for example `SYNC 1/16`).
 - The device cannot read the C64's state back over MIDI. After changing a sound

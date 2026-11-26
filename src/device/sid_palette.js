@@ -32,7 +32,6 @@ var SID_PALETTE = (function () {
         focus: '#E8E8E8',
         graph: '#00BCCC',
         arc: '#00BCCC',
-        stepGap: '#2E2E2E',
         zeroLine: '#3E3E3E',
         graphHandle: '#F0F0F0',
         dotOff: '#454545',
@@ -73,7 +72,6 @@ var SID_PALETTE = (function () {
             case 'live.adsrui': return 'adsr';
             case 'multislider': return 'steps';
             case 'panel':
-                if (v.indexOf('step_gap_') === 0) return 'stepGap';
                 if (v === 'step_zero') return 'stepZero';
                 return null;
             case 'textedit': return 'textedit';
@@ -162,8 +160,6 @@ var SID_PALETTE = (function () {
                     handlecolor: m('graphHandle'), activehandlecolor: m('graphHandle'),
                     activehovercolor: accent
                 };
-            case 'stepGap':
-                return { bgfillcolor: m('stepGap'), bordercolor: m('stepGap') };
             case 'stepZero':
                 return { bgfillcolor: m('zeroLine'), bordercolor: m('zeroLine') };
             case 'steps':

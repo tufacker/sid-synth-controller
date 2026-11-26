@@ -106,6 +106,11 @@ next. Update it in the same commit as the change it describes.
   folder, and what old sets do.
 - **Verification:** say what was checked (offline tests, in Live, with the
   C64) and what was not.
+- **Grouping:** once `## Unreleased` holds more than a few entries, group them
+  under `### Fixed` (bugs, first), `### New`, `### Changed`, `### Compatibility`
+  (saved sets, automation, banks, MIDI), `### Documentation and packaging` and
+  `### Verified`. Leave out headings with nothing under them. A release's notes
+  list every fix, with what went wrong before.
 - **At a release:** rename `## Unreleased` to `## v<version> — current`,
   remove `— current` from the previous version, and start the section with one
   line summing the release. The version matches `package.json` and the tag.

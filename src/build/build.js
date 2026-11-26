@@ -224,7 +224,7 @@ infoZone('lbl_fenv_title', [499, 21, 120, 12], 'Cutoff Envelope',
   'Live-side: a note-triggered ADSR that moves Cutoff over MIDI, with a bipolar Amount. Turn on the filter for it to be heard. Stored with the Live Set, not in the C64 sound.');
 text('lbl_motion_title', 'STEP MOD', [499, 21, 80, 12], 8, true);
 infoZone('lbl_motion_title', [499, 21, 80, 12], 'Step Mod',
-  'Live-side: eight tempo-synced steps offset one setting while Live plays; Smooth glides between them, up to a drawable LFO. Its parameters are named Clocked Motion. Stored with the Live Set, not in the C64 sound.');
+  'Live-side: 16 tempo-synced steps offset one setting while Live plays; Smooth glides between them, up to a drawable LFO. Its parameters are named Clocked Motion. Stored with the Live Set, not in the C64 sound.');
 text('lbl_expression_title', 'EXPRESSION', [490, 21, 120, 12], 8, true);
 infoZone('lbl_expression_title', [490, 21, 120, 12], 'Expression',
   'Live-side: velocity, aftertouch (Pressure), mod wheel, pitch bend and key tracking, each mapped to one setting with a bipolar amount, plus velocity scaling of the Cutoff Envelope. Stored with the Live Set.');
@@ -335,33 +335,38 @@ connect(envShape, 1, ui.fenvdecay, 0);
 connect(envShape, 2, sustainToPercent, 0); connect(sustainToPercent, 0, ui.fenvsustain, 0);
 connect(envShape, 3, ui.fenvrelease, 0);
 
-// Step Mod bars, mirroring the eight (hidden) step parameters.
-const STEP_DEFAULTS = [100, 0, 75, -25, 50, -50, 25, -75];
+// Step Mod bars, mirroring the 16 (hidden) step parameters. Each step is a
+// 10 px column; the 160 px row is centred in the 168 px Step Mod area.
+const STEPS = 16, STEP_COL = 10, STEP_X = 496, STEP_Y = 74, STEP_H = 64, STEP_W = STEPS * STEP_COL;
+const STEP_DEFAULTS = [100, 0, 75, -25, 50, -50, 25, -75, 100, 0, 75, -25, 50, -50, 25, -75];
 const stepBars = add({maxclass: 'multislider', numinlets: 1, numoutlets: 2, outlettype: ['', ''], parameter_enable: 0,
-  varname: 'sid_motion_steps', size: 8, setstyle: 1, signed: 1, setminmax: [-100, 100], spacing: 2, thickness: 17,
-  patching_rect: [492, 74, 168, 70], presentation: 1, presentation_rect: [492, 74, 168, 70]});
-help(stepBars, 'Step Mod Steps', 'Draw the eight Step Mod steps: above the centre line adds to the target, below subtracts, as a share of Amount. Steps past Len are darkened and skipped; the playhead marks the current step while Live plays. Each step is also an automatable parameter (Clocked Motion Step 1-8).');
-// Click-through dressing above the bars: column gaps, a zero line, a mask per
-// step (darkened beyond Len) and a 2 px playhead per step.
+  varname: 'sid_motion_steps', size: STEPS, setstyle: 1, signed: 1, setminmax: [-100, 100], spacing: 1,
+  patching_rect: [STEP_X, STEP_Y, STEP_W, STEP_H], presentation: 1, presentation_rect: [STEP_X, STEP_Y, STEP_W, STEP_H]});
+help(stepBars, 'Step Mod Steps', 'Draw the 16 Step Mod steps: above the centre line adds to the target, below subtracts, as a share of Amount. Steps past Len are darkened and skipped; the playhead marks the current step while Live plays. Each step is also an automatable parameter (Clocked Motion Step 1-16).');
+// Click-through dressing above the bars: a zero line, a mask per step
+// (darkened beyond Len) and a 2 px playhead per step. The gaps between bars
+// are the multislider's own spacing: Live draws a panel narrower than about
+// 4 px wider than asked, so 1 px gap panels showed as 4 px bands.
 const overlay = (name, rect) => panel(name, ...rect, {background: 0, ignoreclick: 1});
-for (let gap = 1; gap < 8; gap++) overlay(`step_gap_${gap}`, [492 + gap * 21, 74, 1, 70]);
-overlay('step_zero', [492, 109, 168, 1]);
-const stepColumn = step => [492 + (step - 1) * 21 + (step > 1 ? 1 : 0), step > 1 ? 20 : 21];
-for (let step = 1; step <= 8; step++) { const [x, w] = stepColumn(step); overlay(`step_mask_${step}`, [x, 74, w, 70]); }
-for (let step = 1; step <= 8; step++) { const [x, w] = stepColumn(step); overlay(`step_head_${step}`, [x, 72, w, 2]); }
-const stepPack = P.newobj(`pak ${STEP_DEFAULTS.join(' ')}`, 8, [''], [900, 520, 250, 20]);
-const stepSetList = P.prepend('setlist', [1158, 520, 92, 20]);
-const stepUnpack = P.newobj('unpack 0 0 0 0 0 0 0 0', 1, Array(8).fill('int'), [900, 546, 210, 20]);
+overlay('step_zero', [STEP_X, STEP_Y + STEP_H / 2, STEP_W, 1]);
+const stepColumn = step => [STEP_X + (step - 1) * STEP_COL, STEP_COL];
+for (let step = 1; step <= STEPS; step++) { const [x, w] = stepColumn(step); overlay(`step_mask_${step}`, [x, STEP_Y, w, STEP_H]); }
+for (let step = 1; step <= STEPS; step++) { const [x, w] = stepColumn(step); overlay(`step_head_${step}`, [x, STEP_Y - 2, w, 2]); }
+const stepPack = P.newobj(`pak ${STEP_DEFAULTS.join(' ')}`, STEPS, [''], [900, 520, 400, 20]);
+const stepSetList = P.prepend('setlist', [1308, 520, 92, 20]);
+const stepUnpack = P.newobj(`unpack ${Array(STEPS).fill(0).join(' ')}`, 1, Array(STEPS).fill('int'), [900, 546, 400, 20]);
 connect(stepPack, 0, stepSetList, 0); connect(stepSetList, 0, stepBars, 0);
 connect(stepBars, 0, stepUnpack, 0);
-for (let i = 0; i < 8; i++) {
+for (let i = 0; i < STEPS; i++) {
   const step = ui[`motionstep${i + 1}`];
   connect(step, 0, stepPack, i);
   connect(stepUnpack, i, step, 0);
-  label(String(i + 1), 492 + i * 21, 61, 21, 1, `lbl_motion_index_${i + 1}`);
-  // 27 px wide (wider than the 21 px column) so "-35" stays on one line.
-  const value = label(String(STEP_DEFAULTS[i]), 489 + i * 21, 146, 27, 1, `lbl_motion_value_${i + 1}`);
-  P.box(value).fontsize = 8;
+  // Step numbers 4 px wider than the column so "16" fits; values alternate
+  // between two rows so "-100" has room beside its neighbours.
+  const index = label(String(i + 1), STEP_X + i * STEP_COL - 2, 61, STEP_COL + 4, 1, `lbl_motion_index_${i + 1}`);
+  P.box(index).fontsize = 7;
+  const value = label(String(STEP_DEFAULTS[i]), STEP_X + i * STEP_COL - 6, STEP_Y + STEP_H + 2 + (i % 2) * 10, 22, 1, `lbl_motion_value_${i + 1}`);
+  P.box(value).fontsize = 7;
   const format = P.newobj('sprintf %d', 1, [''], [1130, 570 + i * 18, 70, 20]);
   const setValue = P.prepend('set', [1204, 570 + i * 18, 80, 20]);
   connect(step, 0, format, 0); connect(format, 0, setValue, 0); connect(setValue, 0, value, 0);
@@ -374,8 +379,8 @@ const M4L_PAGES = {
     'lbl_fenv_title', 'info_lbl_fenv_title'],
   motion: ['sid_motion_on', 'sid_motion_target', 'sid_motion_division', 'sid_motion_length', 'sid_motion_amount',
     'sid_motion_smooth', 'lbl_motion_smooth', 'lbl_motion_title', 'info_lbl_motion_title', 'lbl_motion_target', 'lbl_motion_division',
-    'lbl_motion_length', 'lbl_motion_amount', 'sid_motion_steps', ...range('lbl_motion_index_', 8),
-    ...range('lbl_motion_value_', 8), ...range('step_gap_', 7), 'step_zero', ...range('step_mask_', 8), ...range('step_head_', 8)],
+    'lbl_motion_length', 'lbl_motion_amount', 'sid_motion_steps', ...range('lbl_motion_index_', STEPS),
+    ...range('lbl_motion_value_', STEPS), 'step_zero', ...range('step_mask_', STEPS), ...range('step_head_', STEPS)],
   expression: ['sid_velocity_target', 'sid_velocity_amount', 'sid_pressure_target', 'sid_pressure_amount',
     'lbl_expression_title', 'info_lbl_expression_title', 'lbl_expression_target', 'lbl_expression_amount', 'lbl_velocity', 'lbl_pressure',
     'sid_wheel_target', 'sid_wheel_amount', 'sid_bend_target', 'sid_bend_amount', 'sid_key_target', 'sid_key_amount',
@@ -426,11 +431,14 @@ for (const [word, rect] of [['fenvtick', [595, 270, 66, 20]], ['motionglide', [5
   connect(tick20, 0, message, 0); connect(message, 0, controller, 0);
 }
 
-// Step Mod clock: a tempo-relative metro follows Live's transport; quantizing
-// to the same division keeps step 1 on the grid.
+// Step Mod clock: a tempo-relative metro, quantized to the same division so it
+// fires on Live's grid. Each tick reads Live's song position (transport's
+// total ticks) and the controller works out the step from it.
 const stepMetro = P.newobj('metro 16n @quantize 16n', 2, ['bang'], [20, 510, 168, 20]);
-const stepTick = P.message('motiontick', [194, 510, 82, 20]);
-connect(ui.motionon, 0, stepMetro, 0); connect(stepMetro, 0, stepTick, 0); connect(stepTick, 0, controller, 0);
+const stepPosition = P.newobj('transport', 1, ['int', 'int', 'float', 'float', 'float', '', 'int', 'float', ''], [20, 534, 68, 20]);
+const stepTick = P.prepend('motiontick', [20, 558, 90, 20]);
+connect(ui.motionon, 0, stepMetro, 0); connect(stepMetro, 0, stepPosition, 0);
+connect(stepPosition, 7, stepTick, 0); connect(stepTick, 0, controller, 0);
 const divisionSelect = P.newobj('sel 0 1 2 3 4 5 6 7', 1, Array(9).fill(''), [282, 510, 152, 20]);
 connect(ui.motiondivision, 0, divisionSelect, 0);
 const divisionMessages = ['4n', '8n', '8nt', '16n', '16nt', '16nd', '32n', '32nt'].map((division, i) => {
@@ -438,13 +446,13 @@ const divisionMessages = ['4n', '8n', '8nt', '16n', '16nt', '16nd', '32n', '32nt
   connect(divisionSelect, i, message, 0); connect(message, 0, stepMetro, 0);
   return message;
 });
-// A new playback pass restarts at step 1.
+// Stopping playback releases the target (Step Mod's offset goes back to 0).
 const transport = P.newobj('transport', 1, ['int', 'int', 'float', 'float', 'float', '', 'int', 'float', ''], [620, 510, 68, 20]);
 const transportChange = P.newobj('change', 1, ['int'], [694, 510, 48, 20]);
-const transportStarted = P.newobj('sel 1', 1, ['bang', ''], [748, 510, 42, 20]);
+const transportStopped = P.newobj('sel 0', 1, ['bang', ''], [748, 510, 42, 20]);
 const stepReset = P.message('motionreset', [796, 510, 88, 20]);
-connect(tick20, 0, transport, 0); connect(transport, 6, transportChange, 0); connect(transportChange, 0, transportStarted, 0);
-connect(transportStarted, 0, stepReset, 0); connect(stepReset, 0, controller, 0);
+connect(tick20, 0, transport, 0); connect(transport, 6, transportChange, 0); connect(transportChange, 0, transportStopped, 0);
+connect(transportStopped, 0, stepReset, 0); connect(stepReset, 0, controller, 0);
 
 // ---------------------------------------------------------------------------
 // Panel -> controller
@@ -633,7 +641,7 @@ connect(loadbang, 0, divisionMessages[3], 0);
 // sid_ui_logic.js also uses at run time, so the two never disagree.
 // ---------------------------------------------------------------------------
 const PANEL_COLOURS = [['device_background', 'gutter'], ['oscillator', 'display'], ['btnbg_', 'off'], ['dot_', 'dotOff'],
-  ['step_gap_', 'stepGap'], ['step_zero', 'zeroLine'], ['step_mask_', 'field'], ['step_head_', 'accent']];
+  ['step_zero', 'zeroLine'], ['step_mask_', 'field'], ['step_head_', 'accent']];
 for (const {box} of P.boxes) {
   if (!box.presentation_rect) continue;
   const name = box.varname || '';

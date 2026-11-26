@@ -1,6 +1,6 @@
 {
   "name": "sid-synth-controller",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Max for Live device that edits, automates and stores sounds for LukHash's SID SYNTH on the Commodore 64",
   "license": "MIT",

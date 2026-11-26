@@ -17,6 +17,7 @@ inlets = 1;
 outlets = 0;
 
 var S = { mode:1, ringm:0, pwm:0, vib:0, trem:0, fenv:0, motion:0, ftype:0, vel:0, press:0, page:0, porta:0, len:8, playhead:-1, wheel:0, bend:0, key:0, velenv:0 };
+var STEPS = 16; // Step Mod steps
 var savedWave = null;
 // Controls report their values while the device loads; those are not edits.
 var dirtyReadyAt = new Date().getTime() + 2500;
@@ -24,7 +25,7 @@ var roleCache = {};
 
 function stepNames(prefix) {
     var out = [], i;
-    for (i = 1; i <= 8; i++) out.push(prefix + i);
+    for (i = 1; i <= STEPS; i++) out.push(prefix + i);
     return out;
 }
 
@@ -35,12 +36,13 @@ var LOCK = {
     arp:['sid_mode_porta'],
     // Envelope Retrig has no effect in POLY, ARP or ARP+ (manual, Envelope and Retrig).
     noEnvRetrig:['sid_env_retrig','lbl_env_retrig'],
+    // Speed is shared: arpeggio rate in ARP/ARP+, glide rate for Portamento
+    // in every other mode. Outside ARP with PORTA off the C64 greys it and
+    // ignores it, so it is locked too.
+    speedIdle:['sid_arp_speed','lbl_arp_speed'],
     ringm:['sid_wave_pulse','sid_wave_saw','sid_wave_tri','sid_wave_noise']
 };
 var FADE = {
-    // Speed is shared: arpeggio rate in ARP/ARP+, glide rate for Portamento
-    // in every other mode. It only does nothing outside ARP with PORTA off.
-    speedIdle:['sid_arp_speed','lbl_arp_speed'],
     pwmOff:['sid_pwm_width','sid_pwm_rate','sid_pwm_depth','sid_pwm_cycle','sid_pwm_retrig',
         'lbl_pwm_rate','lbl_pwm_depth','lbl_pwm_cycle','lbl_pwm_retrig'],
     vibOff:['sid_vib_freq','sid_vib_rate','sid_vib_delay','sid_vib_type','sid_vib_retrig',
@@ -51,7 +53,7 @@ var FADE = {
         'sid_motion_smooth','lbl_motion_smooth',
         'lbl_motion_target','lbl_motion_division','lbl_motion_length','lbl_motion_amount']
         .concat(stepNames('lbl_motion_index_')).concat(stepNames('lbl_motion_value_'))
-        .concat(['step_gap_1','step_gap_2','step_gap_3','step_gap_4','step_gap_5','step_gap_6','step_gap_7','step_zero']),
+        .concat(['step_zero']),
     filterOff:['sid_filter_cutoff','sid_filter_reso','sid_filter_rate','sid_filter_cycle','sid_filter_retrig',
         'lbl_filter_rate','lbl_filter_cycle','lbl_filter_retrig'],
     // An expression Amount does nothing while its source has no target
@@ -145,7 +147,7 @@ function paintDots() {
 // Step bars: darken the steps beyond Len so the pattern length is visible.
 function paintStepMasks() {
     var field = SID_PALETTE.color('field'), i, o, a;
-    for (i = 1; i <= 8; i++) {
+    for (i = 1; i <= STEPS; i++) {
         o = obj('step_mask_' + i); if (!o) continue;
         a = i > S.len ? 0.62 : 0;
         o.message('bgfillcolor', field[0], field[1], field[2], a);
@@ -171,7 +173,7 @@ function paintPlayhead() {
 
 function resetPlayhead() {
     var accent = SID_PALETTE.color('accent'), i, o;
-    for (i = 1; i <= 8; i++) { o = obj('step_head_' + i); if (o) o.message('bgfillcolor', accent[0], accent[1], accent[2], 0); }
+    for (i = 1; i <= STEPS; i++) { o = obj('step_head_' + i); if (o) o.message('bgfillcolor', accent[0], accent[1], accent[2], 0); }
     shownHead = -1;
     paintPlayhead();
 }

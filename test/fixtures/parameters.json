@@ -719,7 +719,7 @@
   "order": 46,
   "type": 0,
   "min": 1,
-  "max": 8,
+  "max": 16,
   "initial": [
    8
   ],
@@ -1048,6 +1048,110 @@
   ],
   "unitstyle": 5,
   "varname": "sid_vel_env"
+ },
+ {
+  "name": "Clocked Motion Step 9",
+  "short": "9",
+  "order": 68,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   100
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_9"
+ },
+ {
+  "name": "Clocked Motion Step 10",
+  "short": "10",
+  "order": 69,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   0
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_10"
+ },
+ {
+  "name": "Clocked Motion Step 11",
+  "short": "11",
+  "order": 70,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   75
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_11"
+ },
+ {
+  "name": "Clocked Motion Step 12",
+  "short": "12",
+  "order": 71,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   -25
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_12"
+ },
+ {
+  "name": "Clocked Motion Step 13",
+  "short": "13",
+  "order": 72,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   50
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_13"
+ },
+ {
+  "name": "Clocked Motion Step 14",
+  "short": "14",
+  "order": 73,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   -50
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_14"
+ },
+ {
+  "name": "Clocked Motion Step 15",
+  "short": "15",
+  "order": 74,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   25
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_15"
+ },
+ {
+  "name": "Clocked Motion Step 16",
+  "short": "16",
+  "order": 75,
+  "type": 0,
+  "min": -100,
+  "max": 100,
+  "initial": [
+   -75
+  ],
+  "unitstyle": 0,
+  "varname": "sid_motion_step_16"
  },
  {
   "name": "Preset Bank",

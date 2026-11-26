@@ -74,7 +74,7 @@ The 35-byte record mapping recovered from the supplied banks and editor behavior
 | 30 | Portamento |
 | 31 | Tremolo On |
 | 32 | Tremolo Rate |
-| 33 | PWM Cycle |
+| 33 | PWM Cycle, stored 1–4 (D+U, U+D, UP, DN); the panel uses 0–3 |
 | 34 | Envelope Retrig |
 
 Byte 24 has not been assigned a confirmed musical meaning. When saving, the code starts from the previous slot record and preserves unmapped bytes.

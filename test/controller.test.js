@@ -3,7 +3,9 @@
 const assert = require('assert');
 const {createController, makeBank, restoreDevice} = require('./helpers');
 
-const CC = {cutoff: 74, attack: 73, sustain: 70, wave: 28, ring: 25, sync: 26};
+const CC = {cutoff: 74, attack: 73, sustain: 70, wave: 28, ring: 25, sync: 26, envretrig: 87, pwmwidth: 102, pwmcycle: 105};
+// A whole sound: 37 CCs (34 settings plus the Play Mode and Ring Mod unlock steps).
+const WHOLE_SOUND = 37;
 const FOLDER = () => ({PRESETS1: makeBank('P1'), PRESETS3: makeBank('P3'), 'MY BANK': makeBank('MY')});
 
 // A device as freshly added to a track, with a bank folder.
@@ -27,7 +29,7 @@ module.exports = {
     const device = freshDevice();
     const midi = device.midi();
     assert.deepStrictEqual(midi[0], [0xc0, 0]);
-    assert.strictEqual(midi.length, 35);
+    assert.strictEqual(midi.length, 1 + WHOLE_SOUND);
     assert.strictEqual(device.last('patchname'), 'P1 SND 01');
     assert.strictEqual(device.last('userbank'), 'PRESETS1');
     assert.strictEqual(device.ui('edited').length, 0);
@@ -41,7 +43,7 @@ module.exports = {
   'with no banks the slots are INIT sounds'() {
     const device = freshDevice({});
     assert.strictEqual(device.last('patchname'), 'INIT 01');
-    assert.strictEqual(device.midi().length, 35);
+    assert.strictEqual(device.midi().length, 1 + WHOLE_SOUND);
     assert.deepStrictEqual(device.ui('bankitems').pop().slice(1), ['NO BANKS', 'NEW BANK…']);
   },
 
@@ -89,9 +91,61 @@ module.exports = {
     device.api.RESEND();
     const midi = device.midi();
     assert.deepStrictEqual(midi[0], [0xc0, 0]);
-    assert.strictEqual(midi.length, 35);
+    assert.strictEqual(midi.length, 1 + WHOLE_SOUND);
     assert.deepStrictEqual(device.ccs(CC.cutoff), [99]);
     assert.strictEqual(device.last('status'), 'Sent 01 P1 SND 01 to C64');
+  },
+
+  'a whole sound unlocks each setting on the C64 before sending it (LukHash\'s order)'() {
+    const device = freshDevice();
+    device.api.set('playmode', 1); device.api.set('porta', 1); device.api.set('ring', 1); device.api.set('arpspeed', 12);
+    device.clear();
+    device.api.RESEND();
+    const ccs = device.midi().slice(1).map(m => [m[1], m[2]]);
+    assert.deepStrictEqual(ccs.map(c => c[0]), [1, 22, 31, 23, 22, 87, 30, 25, 28, 26, 25,
+      85, 74, 71, 73, 75, 70, 72, 102, 103, 104, 105, 106, 107, 82, 83, 86, 14, 15, 76, 78, 79, 77, 81, 27, 80, 22]);
+    assert.deepStrictEqual(ccs[0], [1, 0], 'mod wheel to 0 first');
+    assert.deepStrictEqual(ccs[1], [22, 0], 'ARP');
+    assert.deepStrictEqual(ccs[2], [31, 48], 'Speed while in ARP');
+    assert.deepStrictEqual(ccs[4], [22, 38], 'MONO');
+    assert.deepStrictEqual(ccs[6], [30, 127], 'Portamento while in MONO');
+    assert.deepStrictEqual(ccs[7], [25, 0], 'Ring Mod off before the waveform');
+    assert.deepStrictEqual(ccs[10], [25, 127], 'then the sound\'s Ring Mod');
+    assert.deepStrictEqual(ccs[ccs.length - 1], [22, 19], 'the sound\'s own Play Mode last');
+  },
+
+  'single changes are sent alone; Env Retrig is on CC 87'() {
+    const device = freshDevice();
+    device.clear();
+    device.api.set('envretrig', 2);
+    device.api.set('arpspeed', 12);
+    assert.deepStrictEqual(device.midi(), [[0xb0, 87, 86], [0xb0, 31, 48]]);
+  },
+
+  'PWM Width never goes out as 0 (SID SYNTH plays that as silence)'() {
+    const device = freshDevice();
+    device.clear();
+    device.api.set('pwmwidth', 0);
+    assert.strictEqual(device.api.state().pwmwidth, 0, 'the panel keeps 0, so the bank byte is unchanged');
+    device.api.set('pwmwidth', 5);
+    assert.deepStrictEqual(device.ccs(CC.pwmwidth), [1, 5]);
+  },
+
+  'PWM Cycle is stored 1-4 in banks and shown 0-3 on the panel'() {
+    // makeBank stores byte 33 as 1 + slot % 4: slot 1 is D+U (1), slot 4 is DN (4).
+    const device = freshDevice();
+    assert.strictEqual(device.api.state().pwmcycle, 0);
+    device.api.preset(4);
+    assert.strictEqual(device.api.state().pwmcycle, 3);
+    device.clear();
+    device.api.RESEND();
+    assert.deepStrictEqual(device.ccs(CC.pwmcycle), [96]);
+    device.api.set('pwmcycle', 1);
+    device.api.SAVEPATCH(); device.flush();
+    device.api.SAVEPATCH(); device.flush();
+    const bytes = Buffer.from(device.files.PRESETS1, 'hex');
+    assert.strictEqual(bytes[2 + 3 * 35 + 33], 2, 'U+D saves as 2');
+    assert.strictEqual(bytes[2 + 0 * 35 + 33], 1, 'other slots untouched');
   },
 
   'PANIC sends All Sound Off and All Notes Off'() {
@@ -128,7 +182,7 @@ module.exports = {
     assert.strictEqual(device.last('slotparam'), '3');
     assert.strictEqual(device.last('patchname'), 'P1 SND 03');
     assert.ok(!device.midi().some(m => (m[0] & 0xf0) === 0xc0));
-    assert.strictEqual(device.midi().length, 34);
+    assert.strictEqual(device.midi().length, WHOLE_SOUND);
   },
 
   'Ring Mod and Hard Sync switch each other off'() {
@@ -184,6 +238,54 @@ module.exports = {
     device.clear();
     device.api.set('motionon', 0);
     assert.deepStrictEqual(device.ccs(CC.cutoff), [64]);
+  },
+
+  'Step Mod takes its step from Live\'s song position, not a running count'() {
+    const device = freshDevice();
+    device.api.set('motionlength', 4);
+    device.api.set('motionon', 1);
+    const stepAt = ticks => { device.clock += 125; device.api.motiontick(ticks); return device.ui('motionstep').pop()[0]; };
+    // 1/16 (120 ticks): steps follow the grid from bar 1, every 4 sixteenths.
+    assert.strictEqual(stepAt(0), 0);
+    assert.strictEqual(stepAt(120), 1);
+    assert.strictEqual(stepAt(119.6), 1, 'a tick a hair early still lands on its grid point');
+    // Playback started mid-bar (beat 2 = 480 ticks) or a loop jump back to bar 1.
+    assert.strictEqual(stepAt(480), 0);
+    assert.strictEqual(stepAt(600), 1);
+    assert.strictEqual(stepAt(0), 0);
+    // Rate 1/8 (240 ticks) and 1/8T (160 ticks).
+    device.api.set('motiondivision', 1);
+    assert.strictEqual(stepAt(720), 3);
+    device.api.set('motiondivision', 2);
+    assert.strictEqual(stepAt(800), 1);
+  },
+
+  'Step Mod runs up to 16 steps'() {
+    const device = freshDevice();
+    device.api.set('cutoff', 64);
+    device.api.set('motiontarget', 0);
+    device.api.set('motionamount', 16);
+    device.api.set('motionlength', 16);
+    device.api.set('motionstep12', -100);
+    device.api.set('motionon', 1);
+    device.clear();
+    device.api.motiontick(11 * 120);
+    device.api.motiontick(16 * 120);
+    assert.deepStrictEqual(device.ui('motionstep'), [[11], [0]]);
+    assert.deepStrictEqual(device.ccs(CC.cutoff), [0, 127], 'step 12 at -100% then step 1 at +100%');
+  },
+
+  'Step Mod lets go of its target when playback stops'() {
+    const device = freshDevice();
+    device.api.set('cutoff', 64);
+    device.api.set('motiontarget', 0);
+    device.api.set('motionamount', 16);
+    device.api.set('motionon', 1);
+    device.clear();
+    device.api.motiontick(0);
+    device.api.motionreset();
+    assert.deepStrictEqual(device.ccs(CC.cutoff), [127, 64]);
+    assert.deepStrictEqual(device.ui('motionstep'), [[0], [-1]]);
   },
 
   'the Cutoff Envelope rises on a note and falls back after release'() {
@@ -246,7 +348,7 @@ module.exports = {
     device.clear();
     device.api.RANDOM();
     const midi = device.midi();
-    assert.strictEqual(midi.length, 34, 'every CC, no Program Change');
+    assert.strictEqual(midi.length, WHOLE_SOUND, 'every CC, no Program Change');
     assert.ok(midi.every(m => (m[0] & 0xf0) === 0xb0));
     assert.strictEqual(device.last('patchname'), 'RANDOM');
     assert.strictEqual(device.ui('edited').length, 1);

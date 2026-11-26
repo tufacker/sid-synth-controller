@@ -27,6 +27,8 @@ top. Follow "Keeping the changelog" in `docs/DEVELOPING.md`:
   then the technical detail if it matters later;
 - say when saved Live Sets, automation or banks are affected, and how;
 - say what was verified (offline tests, in Live, with the C64) and what wasn't;
+- group a release's entries under Fixed, New, Changed, Compatibility,
+  Documentation and packaging, and Verified, listing every fix first;
 - never rewrite released sections except to correct them;
 - at a release, rename `## Unreleased` to `## v<version> — current` (matching
   `package.json` and the git tag) and drop `— current` from the previous one.

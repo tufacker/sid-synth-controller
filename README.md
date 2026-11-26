@@ -4,7 +4,7 @@ A Max for Live device for editing, automating and storing sounds on
 [SID SYNTH](https://sid.lukhash.com/), LukHash's synthesizer for the Commodore 64,
 over MIDI.
 
-![The device in Ableton Live](docs/images/panel.jpg)
+![The device in Ableton Live, showing the 16-step Step Mod](docs/images/panel.jpg)
 
 - Every sound setting SID SYNTH accepts over MIDI on one panel, as Live
   parameters you can automate and map, using SID SYNTH's default CC map.
@@ -13,9 +13,9 @@ over MIDI.
 - Saving to any slot of your banks; the sound is stored with the Live Set and
   sent to the C64 when the set opens.
 - A RANDOM button that rolls new, playable sounds.
-- Live-side layers SID SYNTH doesn't have: a cutoff envelope, a tempo-synced
-  step modulator, and velocity, aftertouch, mod-wheel, pitch-bend and key
-  tracking mapped to sound parameters.
+- Live-side layers SID SYNTH doesn't have: a cutoff envelope, a 16-step
+  modulator locked to Live's beat grid, and velocity, aftertouch, mod-wheel,
+  pitch-bend and key tracking mapped to sound parameters.
 
 This is an independent project, not made by or affiliated with LukHash. SID
 SYNTH is LukHash's free bonus disk for the *Neon Airlines* album; get it, and

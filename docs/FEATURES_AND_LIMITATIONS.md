@@ -40,7 +40,7 @@ Note-triggered ADSR modulation of CC74 around the stored Cutoff base. Amount is 
 
 ### Step Mod (parameters: Clocked Motion)
 
-Eight-step Live-tempo sequencer targeting Cutoff, Resonance, PWM Width, PWM Depth, Vibrato Depth, Tremolo Rate, or Sustain (a fade: down fades held notes, up is heard from the next note). It offsets the stored value and restores it when disabled. Smooth (0–100 %) glides between steps on an eased curve; at 100 % it behaves as a drawable, tempo-synced LFO. A playhead shows the current step.
+Sixteen-step sequencer, locked to Live's beat grid, targeting Cutoff, Resonance, PWM Width, PWM Depth, Vibrato Depth, Tremolo Rate, or Sustain (a fade: down fades held notes, up is heard from the next note). It offsets the stored value and restores it when disabled. Smooth (0–100 %) glides between steps on an eased curve; at 100 % it behaves as a drawable, tempo-synced LFO. A playhead shows the current step.
 
 ### Expression
 

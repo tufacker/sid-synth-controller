@@ -2,17 +2,47 @@
 
 Changes by version, newest first. The rules for keeping it are in `docs/DEVELOPING.md` ("Keeping the changelog").
 
-## Unreleased
+## v1.0.1 — current
 
-Packaging and documentation only; the device is unchanged.
+The fixes from LukHash's review of v1.0.0, Step Mod locked to the beat, and 16 Step Mod steps. Every change below was checked in Live 12 and on the C64.
 
+### Fixed
+
+- **Env Retrig now reaches the C64.** It was sent on CC 67; SID SYNTH listens on CC 87 (our own capture of its MIDI CC SETUP screen shows 087, so 67 was a transcription error). In v1.0.0 the control did nothing. Saved sets and automation keep their values and now take effect.
+- **PWM Cycle loads and saves banks correctly.** `.SLO` banks store it as 1-4 (D+U, U+D, UP, DN) and v1.0.0 read and wrote 0-3, so every factory sound loaded one shape along (D+U played as U+D, and so on) and banks saved from Live came back wrong on the C64. The bank byte now has 1 taken off when read and 1 added when saved (`applyRecord`/`stateToRecord`).
+- **PWM Width never sends 0.** SID SYNTH plays width 0 as silence: DELTABASS, SANXION, ALIEN and HEAVY ARP have width 0 and went silent with PWM switched off. CC 102 now goes out as at least 1, from the knob, Step Mod and Expression; the panel and banks keep 0.
+- **Whole sounds arrive complete.** SID SYNTH ignores any setting that is greyed in its current mode, so Speed could be lost when Portamento was off on the C64, and the waveform when Ring Mod was on. Picking a slot, opening a Live Set, C64 SYNC and RANDOM now send the settings in LukHash's order (`sendOrder`): mod wheel 0, Play Mode ARP, Speed and Dir, Play Mode MONO, Env Retrig and Portamento, Ring Mod off, Waveform, Hard Sync, Ring Mod, the rest, Vibrato Retrig, and the sound's own Play Mode last. The C64 steps through a few play modes as a sound arrives and held notes stop; that is expected. Single control changes are sent as before.
+- **Speed is locked when the C64 ignores it** (outside ARP/ARP+ with Portamento off), like Dir and Portamento. It was only dimmed, so changing it there left the panel and the C64 different.
+- **Step Mod lands on the beat.** It followed Live's tempo but counted its steps from wherever playback started, so patterns sat off the bar grid, could start a step late, and drifted after loop jumps or when Step Mod was switched on mid-song. Each step is now worked out from Live's song position (`transport` ticks on every quantized tick), so step 1 falls every Len steps from bar 1. Stopping playback releases the target (it used to reset on start, racing the first step).
+- **Step Mod bars are even.** Step 1 drew wider than the others: Live drew the 1 px separator panels between bars about 4 px wide, and step 1 had none on its left. The bars now use the multislider's own 1 px spacing.
+
+### New
+
+- **16 Step Mod steps.** Len goes up to 16. The step display has 16 narrower columns (10 px each), step numbers above and each value below on two alternating rows, and the steps past Len are darkened as before. Steps 9-16 are new automatable parameters, Clocked Motion Step 9-16; their defaults repeat steps 1-8.
+
+### Compatibility
+
+- **Live Sets and automation:** Clocked Motion Step 9-16 are appended parameters; Clocked Motion Length's range is now 1-16 (was 1-8). Nothing is renamed or reordered. Saved sets keep Len and steps 1-8 and get the defaults for steps 9-16. Step Mod patterns may now sit at a different point in the bar than in v1.0.0.
+- **Banks:** slots saved from v1.0.0 with PWM Cycle set to U+D, UP or DN reload one shape lower; set them again and save. D+U and untouched factory sounds load correctly. A saved set keeps the shape it played but may show EDITED against its slot.
+- **MIDI:** Env Retrig on CC 87; PWM Width (CC 102) never below 1; a whole sound is 37 CCs (was 34) in the order above.
+
+### Documentation and packaging
+
+- **README** picture shows the Step Mod page with 16 steps and v1.0.1; the feature list mentions the 16-step modulator locked to Live's beat grid.
+- **CC map and protocol:** `docs/default_cc_map.csv` and `docs/MIDI_PROTOCOL.md` give CC 87 for Env Retrig and the Width floor, and describe the whole-sound order and the C64's interlocks; `docs/PRESET_FORMAT.md` gives the PWM Cycle byte as 1-4; the user guide covers locked controls and 16 steps; `docs/ARCHITECTURE.md` explains how Step Mod finds its step.
 - **No version in any folder name.** The build writes `dist/SID SYNTH Controller/` and the release zip, `SID-SYNTH-Controller-v<version>.zip`, unzips to a folder of that name. An installed copy keeps its path across updates, so Live Sets that use it keep finding its scripts. The zip is made with plain `zip` (no `__MACOSX` entries).
 - **Install steps rewritten** after testing in Live 12: drag the whole folder from Finder onto `Presets/MIDI Effects/Max MIDI Effect` in the User Library list of Live's browser, which copies it with every file. Loading the `.amxd` straight from Finder or by dropping it on Live's icon copies nothing and ties the device to that folder.
 - **C64 patch names explained.** The README and user guide explain that the C64 shows patch names from the bank it has loaded, and the user guide's title in the repository no longer shows a `{{VERSION}}` placeholder.
-- **Developer guide.** `docs/DEVELOPING.md` now covers the whole release (tag, push, GitHub release) and what to check when SID SYNTH itself changes, and `tools/devinstall.sh` installs a test build under a unique name.
-- **Changelog rules.** `docs/DEVELOPING.md` ("Keeping the changelog") says where and how entries are written, and a `CLAUDE.md` asks Claude Code to keep this file current in the same commit as each change. The v1.0.0 entry is corrected (C64 SYNC, where the version label sits, no status line).
+- **Developer guide.** `docs/DEVELOPING.md` covers the whole release (tag, push, GitHub release) and what to check when SID SYNTH itself changes, and `tools/devinstall.sh` installs a test build under a unique name.
+- **Changelog rules.** `docs/DEVELOPING.md` ("Keeping the changelog") says where and how entries are written, including Fixed / New / Compatibility headings for a release, and `CLAUDE.md` asks Claude Code to keep this file current in the same commit as each change. The v1.0.0 entry is corrected (C64 SYNC, where the version label sits, no status line).
 
-## v1.0.0 — current
+### Verified
+
+- **Offline:** `npm run check` (build, parameter check, 39 tests). New tests cover the send order, CC 87, the Width floor, the PWM Cycle bank round trip, Step Mod steps from song position at 1/16, 1/8 and 1/8T (start mid-bar, loop back), release on stop, and a 16-step pattern. The session recording was re-recorded after its difference was reviewed.
+- **In Live 12,** with test builds on a track routed to the C64: PRESETS1 slot 01 REDBERET loads with PWM Cycle D+U (v1.0.0 showed U+D); Speed locks in POLY with Portamento off and unlocks with it on; Ring Mod selects triangle, ignores a Saw press, and brings the pulse back when switched off; Len 8, 12 and 16 darken the right steps; drawing a step updates its value.
+- **On the C64:** Env Retrig in MONO, the whole-sound order, the Width floor, Step Mod on the beat with playback running, and the playhead across all 16 steps.
+
+## v1.0.0
 
 First public release. Functionally the same as v0.26.0.
 

@@ -58,7 +58,7 @@ function makeBank(tag) {
   bytes[0] = 0x00; bytes[1] = 0xc0;
   for (let i = 0; i < 54; i++) {
     const record = [i % 8 === 3 ? 0 : i % 8, i % 4, i % 16, (i * 5) % 16, (i * 7) % 16, (i * 3) % 16, 30, (i * 3) % 32, i % 16, i % 2,
-      19, 22, 0, 0, 0, 16, 0, 1, 30, 0, 0, 1, 0, 0, 3, 8, 1, 0, 0, 0, 0, 0, 17, 0, 0];
+      19, 22, 0, 0, 0, 16, 0, 1, 30, 0, 0, 1, 0, 0, 3, 8, 1, 0, 0, 0, 0, 0, 17, 1 + i % 4, 0];
     if (i === 4) { record[21] = 3; record[23] = 1; record[25] = 21; }
     Buffer.from(record).copy(bytes, 2 + i * 35);
     const name = `${tag} SND ${String(i + 1).padStart(2, '0')}`.padEnd(9, ' ');
